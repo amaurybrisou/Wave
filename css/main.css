@@ -1,0 +1,174 @@
+
+	:root {
+		var-green: rgb(70,95,91);
+		var-top-modal: 10%;
+	}
+
+	* {
+		margin: 0;
+	     user-select: none;
+	    -khtml-user-select: none;
+	    -o-user-select: none;
+	    -moz-user-select: -moz-none;
+	    -webkit-user-select: none;
+	}
+
+	::selection { background: transparent;color:inherit; }
+	::-moz-selection { background: transparent;color:inherit; }
+
+	.fade-out {
+	    opacity: 0;
+	    -ms-filter: "prodig:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+	    filter: alpha(opacity = 0); 
+	}
+	 
+	.fade-in {
+	    opacity: 1; 
+	    -ms-filter:"prodig:DXImageTransform.Microsoft.Alpha(Opacity=100)"; 
+	    filter: alpha(opacity = 100); 
+	}
+
+	.size-up {
+		height: 100%;
+		width: 100%;
+	}
+
+	.size-down {
+		height: 0%;
+		width: 0%;
+	}
+
+	#main_modal {
+
+		background-color: rgba(70,95,91, 0);
+		z-index: 3000;
+		position: fixed;
+
+		-webkit-transition: background-color 1s ease-in-out, height 1s ease-in-out, width 1s ease-in-out;
+	    -moz-transition:background-color 1s ease-in-out, height 1s ease-in-out, width 1s ease-in-out;
+	    -o-transition: background-color 1s ease-in-out, height 1s ease-in-out, width 1s ease-in-out;
+	    transition: background-color 1s ease-in-out, height 1s ease-in-out, width 1s ease-in-out;
+
+	}
+
+	#main_modal.fade-in {
+	    background-color: var(green);
+		background-color: rgba(70,95,91, 0.6);
+		
+		filter:"progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000)";
+		-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000)";
+	}
+	
+
+	#main_modal.fade-out {
+		background-color: rgb(70,95,91);
+		background-color: rgba(70,95,91, 0);
+	}
+
+
+
+
+	#modal_content {
+
+		padding: 2%;
+		z-index: 4000;
+		position:fixed;
+		left: 25%;
+		top: 25%;
+		background-color : rgb(161,166,172);
+		-moz-border-radius:10px 10px 10px 10px;
+		-webkit-border-radius:10px 10px 10px 10px;
+		border-radius:10px 10px 10px 10px;
+		overflow: hidden;
+
+	}
+
+	#modal_content  {
+		-webkit-transition: opacity 0.5s ease 0.25s, height 1s ease 0.1s, width 0.5s ease 0.5s;/* transition pour Chrome et Safari */
+	    -moz-transition: 	opacity 0.5s ease 0.25s, height 1s ease 0.1s, width 0.5s ease 0.5s;/* transition pour Firefox */
+	    -o-transition: 		opacity 0.5s ease 0.25s, height 1s ease 0.1s, width 0.5s ease 0.5s;/* transition pour Opéra */
+	    transition: 		opacity 0.5s ease 0.25s, height 1s ease 0.1s, width 0.5s ease 0.5s;*/ 
+	}
+
+	#modal_content.fade-in {
+	    opacity: 0.9; 
+	    -ms-filter:"prodig:DXImageTransform.Microsoft.Alpha(Opacity=90)";
+	    filter: alpha(opacity = 90); 
+	}
+
+
+	#modal_content.size-up {
+		height:50%;
+		width: 50%;
+	}
+
+	
+	
+
+	#modal_content * {
+
+		-moz-border-radius:10px 10px 10px 10px;
+		-webkit-border-radius:10px 10px 10px 10px;
+		border-radius:10px 10px 10px 10px;	
+	}
+
+	
+ 
+	
+
+
+	#modal_content .close {
+		float: right;
+		height: 1%;
+		width: 1%;
+		right: 1%;
+		top: 1%;
+	}
+
+	#modal_content .close:hover {
+		cursor: pointer;
+	}
+
+	#labels {
+		height: 100%;
+		width: 100%;		
+		z-index: 2000;
+		pointer-events: none;
+		position: absolute;
+
+		-webkit-transition: opacity 0.5s ease-in-out;/* transition pour Chrome et Safari */
+	    -moz-transition: opacity 0.5s ease-in-out;/* transition pour Firefox */
+	    -o-transition: opacity 0.5s ease-in-out;/* transition pour Opéra */
+	    transition: opacity 0.5s ease-in-out; /* on écrit cette ligne à la fin de façon à ce que ce soit elle qui soit prise en compte lorsque l'attribut transition sera pris en compte par tous les navigateurs */
+	}
+
+	
+
+
+
+	#img_back {
+		position: fixed;
+		height: 100%;
+		width: 100%;
+
+	}
+
+	.img {
+		position: absolute;
+		height: 100%;
+		width: 100%;
+		z-index:1000; 
+		pointer-events:none;
+	
+		-webkit-transition: opacity 0.2s ease-in-out;/* transition pour Chrome et Safari */
+	    -moz-transition: opacity 0.2s ease-in-out;/* transition pour Firefox */
+	    -o-transition: opacity 0.2s ease-in-out;/* transition pour Opéra */
+	    transition: opacity 0.2s ease-in-out; /* on écrit cette ligne à la fin de façon à ce que ce soit elle qui soit prise en compte lorsque l'attribut transition sera pris en compte par tous les navigateurs */	
+	}
+
+	.area:hover {
+		cursor: pointer;
+	}
+
+	
+	
