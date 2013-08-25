@@ -1,90 +1,39 @@
 <html>
 <head>
+	<script type="text/javascript" src="lib/execute_script.js"></script>
+	<script type="text/javascript" src="lib/utilities.js"></script>
+	<link rel='stylesheet' type="text/css" href="css/main.css">
+
+
 </head>
 <body>
 	
 	<div id="main">
-		<div id="modal"></div>
-		<canvas id="labels"></canvas>
+		<canvas id="labels" class='fade-out'  width="300" height="300">Your Browser Doesn't Support Canvas</canvas>
+		<div id="main_modal" class="fade-out size-down close">
+			<div id="modal_content" class="fade-out size-down">
+				<div id="info_left" class='fade-out size-down'></div>
+				<div id="info_right" class='not-selected fade-out'>
+					<div id='table_entry_info'></div>
+					<div id='table_entry_img'></div>
+				</div>
+				<p class="close" onmousedown="javascript:CloseModal;">X</p>
+			</div>
+		</div>
+		
 	</div>
 	
 
 
-	<style media="screen" type="text/css">
-
-	
-
-	* {		
-		margin: 0;
-	}
-
-
-	#modal {
-		height:1%;
-		width:1%;
-		background-color: rgba(70,95,91,1);
-		z-index: 3000;
-		position: fixed;
-		visibility: hidden;
-	}
-
-	#modal_content {
-		visibility: hidden;
-		opacity: 0.85;
-		height:0%;
-		width:0%; 
-		z-index: 4000;
-		position:fixed;
-		left: 10%;
-		top: 10%;
-		background-color : rgba(161,166,172,1);
-		-moz-border-radius:10px 10px 10px 10px;
-		-webkit-border-radius:10px 10px 10px 10px;
-		border-radius:10px 10px 10px 10px;
-	}
-
-	
-	#labels {
-		height: 100%;
-		width: 100%;		
-		z-index: 2000;
-		pointer-events: none;
-		position: absolute;
-	}
-
-	#img_back{
-		position: fixed;
-		height: 100%;
-		width: 100%;
-	}
-
-	.img {
-		visibility:hidden;
-		position: absolute;
-		height: 100%;
-		width: 100%;
-		z-index:1000; 
-		pointer-events:none;
-		
-	}
-
-	.area:hover {
-		cursor: pointer;
-	}
-
-	.close {
-		height: 10px;
-		width: 10px;
-		float:right;
-	}
-	
-	</style>
 
 	<script type="text/javascript">
+	
+		//avoid image dragging
+		document.body.ondragstart = function() { return false; };
+		var label_timeout = 5000;
 		var main = $('main');
-		var MAX_FOG = 0.6;
 		
-		main.innerHTML += '<img usemap="#img_map" id="img_back" class="click" src="img/seignosse.jpg" />';
+		main.innerHTML += '<img usemap="#img_map" id="img_back" class="click" src="img/seignosse.jpg"/>';
 
 		<!--//--><![CDATA[//><!--
 
@@ -93,7 +42,7 @@
 						label_x: 1550, 
 						label_y: 830, 
 						label_pos_x: 70, 
-						title: 'Projets', 
+						title: 'Projects', 
 						file: new Image().src  = 'img/wave.png', 
 						coords : [{x:0,y:860, _x:585, _y:1100},
 								{x:650,y:860, _x:2500, _y:1100},
@@ -106,13 +55,13 @@
 						title: 'Blog', 
 						file: new Image().src  = 'img/poto_droite.png', 
 						coords : [{x:2100, y:1303, _x:2717, _y:1923},
-									{x:2000,y:1303, _x:2120, _y:1465}]
+									{x:2000,y:1303, _x:2220, _y:1465}]
 					}, //poto droite
 					{
 						label_x: 420,
 						label_y: 700,  
 						label_pos_x: 70, 
-						title: 'Maquette', 
+						title: 'Artwork', 
 						file: new Image().src  = 'img/poto_gauche.png', 
 						coords :[{x:586, y:0, _x:642, _y:(1920)},
 								{x:400,y:600, _x:585, _y:850}]
@@ -146,7 +95,7 @@
 		var w = (window.innerWidth / 2560);
 
 		for( var i = 0; i < images.length; i++){
-			map.innerHTML += "<img src='"+images[i].file+"' class='img' />";
+			map.innerHTML += "<img src='"+images[i].file+"' class='img fade-out' />";
 			
 			for(var j = 0; j < images[i].coords.length; j++){
 				coords = images[i].coords[j];
@@ -161,10 +110,9 @@
 		main.innerHTML += ' </map> ';
 
 		
-
 		for(var i = 0; i < images.length; i++){
-			
 			for(var j in images[i].coords){
+			
 				img = $('img_'+i+'_'+j);
 				img.onmousedown = onMouseClick;
 				img.onmouseover =  onMouseOver;
@@ -172,35 +120,13 @@
 		}
 
 		
-		CanvasRenderingContext2D.prototype.clear = 
-		  CanvasRenderingContext2D.prototype.clear || function (preserveTransform) {
-		    if (preserveTransform) {
-		      this.save();
-		      this.setTransform(1, 0, 0, 1, 0, 0);
-		    }
-
-		    this.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-		    if (preserveTransform) {
-		      this.restore();
-		    }           
-		};
-		
-
 		var ctx = getContext();
 		ctx.globalAlpha = 1;
 
 		document.onmousemove = onMouseMove;
 
-		function getContext(){
-			return (function(callback){
-				$("labels").setAttribute("width", (window.innerWidth)+'px');
-				$("labels").setAttribute("height", (window.innerHeight) +'px');
-				return callback();
-			}(function(){
-				return $("labels").getContext("2d");
-			}));
-		}
+		
+
 		function Labels(alpha){
 
 			var h = (window.innerHeight / 1920);
@@ -208,7 +134,7 @@
 
 			
 			ctx = getContext();
-			ctx.clear();
+			clearContext(ctx);
 			var x, y, image;
 			for(var i = 0; i < images.length; i++){
 				
@@ -244,9 +170,6 @@
 				ctx.fillText(image.title, x  , y - (5 * h));
 
 			}
-
-			
-
 		}
 
 		window.onresize = function(){
@@ -272,92 +195,106 @@
 		function onMouseMove(e){
 			var label = $('labels');
 
-			
-			return (function(){
-				if(timeout !== null){
-					clearTimeout(timeout);
-					if(!activated){
-						fadeIn(0);
-					}
-				} else {
-					if(activated) return;
-					activated = true;
-					fadeIn(0);
-				}
-
-				function fadeIn(alpha){
-					if(alpha < 1){
-						Labels(alpha);
-						alpha += 0.1
-						setTimeout(function(){ fadeIn(alpha); }, 50);
-					} 
-				};
-
-				timeout = setTimeout(function(){
-					timeout = null;
-					fadeOut(1);
-					function fadeOut(alpha){
-						if(alpha > 0){
-							Labels(alpha);
-							alpha -= 0.1;
-							setTimeout(function(){ fadeOut(alpha); }, 100);
-						} else {
-							activated = false;
-						}
-						
-					};
-				}, 3000);
-			}());
+			if(hasClass(label, 'fade-out')){
+				removeClass(label, 'fade-out');
+				addClass(label, 'fade-in');
+				setTimeout(function(){
+					removeClass(label, 'fade-in');
+					addClass(label, 'fade-out');
+				}, label_timeout);
+			} else {
+				clearTimeout(label);
+			}
 		}
+
+
 
 		function onMouseOver(e){
 			if (e == null) e = window.event;
 			var target = e.target != null ? e.target : e.srcElement;	
-			var s = target.prev('img');
+			var s = prev(target,'img');
 
-			target.onmouseout = function(e){
-				target.prev('img').style.visibility = 'hidden';	
+			if(!hasClass(s, 'fade-in')){
+				addClass(s, 'fade-in');	
+			}		
+
+			target.onmouseout = target.onmouseleave =  function(e){
+				fadeOut(s, 0);
 			}
-
-			target.prev('img').style.visibility = 'visible';	
-
-			
 		}
 
-		$('modal').onmousedown = function(e){
+		$('main_modal').onmousedown = $('main_modal').click = CloseModal;
+
+		function CloseModal(e){
 			if (e == null) e = window.event;
-			var target = e.target != null ? e.target : e.srcElement;	
-			
-			if(target.id === "modal") $('modal').hide();
+			var target = e.target != null ? e.target : e.srcElement;
+				
+			if(hasClass(target, 'close')){
+				target = $('main_modal');
+				fadeOut(target, 1000);
+				sizeDown(target);
+				
+				target = $('modal_content');
+				fadeOut(target);
+				sizeDown(target);
+				
+
+				target = $('info_right');
+				fadeOut(target);
+				sizeDown(target);
+
+				target = $('info_left');
+				fadeOut(target);
+				sizeDown(target);
+
+				
+				$('table_entry_img').innerHTML = $('table_entry_info').innerHTML = " ";
+			};
 			
 		}
 
 		function onMouseClick(e){
+			e.preventDefault();
 			if (e == null) e = window.event;
 			var target = e.target != null ? e.target : e.srcElement;
 
-			if(target.className.contains('click')){
+			if(hasClass(target, 'click')){
+
+				if(target.title === "Github"){
+					window.open("https://github.com/amaurybrisou", "_blank", '', false);
+					return;
+				}
+				if(target.title === "Blog"){
+					window.open("http://puzzledge.org", "_blank", '', false);
+					return;
+				}
 				
-				var modal = $("modal");
+				var info_left = $("info_left");
 
 				(function(callback){
 					var ret = getPage(target.title.toLowerCase());
 					callback(ret);
 				}(function(data){
-	
-					modal.innerHTML = '<div id="modal_content" >'+
-					'<p class="close" onmousedown="javascript:$(\'modal\').hide();">X</p>'+
-					data+'</div>';
-
-					modal.show();
+					info_left.innerHTML = data;
+					
+					exec_body_scripts(info_left);
+					show($('main_modal'));
 
 				}));
 			}
 		}
 
+		function show(main_modal){
+			fadeIn(main_modal);
+			sizeIn(main_modal);
+			var modal_content = $('modal_content');
+			fadeIn(modal_content);
+			sizeIn(modal_content);			
+		}
+
 		var getPage = function(t){
 			var xhr = new XMLHttpRequest(), ret = "";
-			xhr.open('GET', 'save/'+t+'.html', false);
+			xhr.open('GET', 'views/'+t+'.html', false);
 			xhr.onreadystatechange= function() {
 			    if (this.readyState!==4) return;
 			    if (this.status!==200) return; // or whatever error handling you want
@@ -368,110 +305,8 @@
 			
 		}
 
-		Object.prototype.show = function(){
-			var that = this;
-			return (function(){
-				that.firstChild.style.opacity = 0;
-				that.style.visibility = 'visible';
-				that.firstChild.style.visibility = 'visible';
-
-				var i = j = 0;
-					
-				grow();
-				
-				function grow(){
-					var height =  (that.style.height === "" ) ? 0 : parseInt(that.style.height);
-					var width =   (that.style.width === "" ) ? 0 : parseInt(that.style.width);
-					var child_height =  (that.firstChild.style.height === "" ) ? 0 : parseInt(that.firstChild.style.height);
-					var child_width =   (that.firstChild.style.width === "" ) ? 0 : parseInt(that.firstChild.style.width);
-					setTimeout(function(){
-						that.style.height = height + 1+'%';
-						that.style.width = width + 1+'%';
-
-
-						if(height + 1 <= 120){
-							if((height % 16) === 0 && i < MAX_FOG){
-								that.style.background = 'rgba(70,95,91, '+i+')';
-								//that.style.opacity = i;
-								i += 0.1;
-							}
-							if(height >= 10 && j < 0.9){
-						
-								that.firstChild.style.opacity = j;
-								//that.firstChild.style['background'] = 'rgba(161,166,172, '+j+')';
-								j += 0.1;
-							}
-							if(height >= 10 ){
-								if(child_width <= 80){
-									that.firstChild.style.width = child_width + 1+'%';	
-								}
-								if(child_height <= 80){
-									that.firstChild.style.height = child_height + 1+'%';
-								}								
-							}
-							
-							
-							grow();
-						}
-					}, 1);
-				}
-			}());
-		}
-
-		Object.prototype.hide = function(){
-			var that = this;
-
-			return (function(){
-				dec();
-				var i = MAX_FOG;
-				var j = 1;
-				function dec(){
-					setTimeout(function(){
-						that.style.background = 'rgba(70,95,91, '+i+')';
-						//that.style.opacity = i;
-						i -= 0.1;
-
-						j -= 0.1;
-						that.firstChild.style.opacity = j;
-						//that.firstChild.style['background'] = 'rgba(161,166,172, '+j+')';
-								
-						if(i > 0 || j > 0){
-							dec();
-						} else {
-							that.style.visibility = 'hidden';
-							that.firstChild.style.visibility = 'hidden';
-							that.style.height = '0%';
-							that.style.width =  '0%';
-							that.firstChild.style.height = '0%';
-							that.firstChild.style.width = '0%';
-						}
-					}, 20);
-				}
-				
-			}());	
-		}
-
-		String.prototype.contains = function(s){
-			return (this.indexOf(s) != -1) ? 1 : 0;
-		}
-
-		Object.prototype.prev = function(s){
-			var that = this;
-			
-			if( that.previousSibling.className.contains(s)){
-				return that.previousSibling;
-			}
-
-			that = that.previousSibling;
-			return that.prev(s);
 		
-			
-		}
-
-		function $(id) { return document.getElementById(id); }
-
-
-		//onMouseMove();
+		
 		Labels(1);
 
 		
