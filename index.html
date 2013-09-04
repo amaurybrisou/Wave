@@ -2,174 +2,260 @@
 <head>
 	<script type="text/javascript" src="lib/execute_script.js"></script>
 	<script type="text/javascript" src="lib/utilities.js"></script>
+
+	
+
 	<link rel='stylesheet' type="text/css" href="css/main.css">
 
 
 </head>
 <body>
-	
-	<div id="main">
-		<canvas id="labels" class='fade-out'  width="300" height="300">Your Browser Doesn't Support Canvas</canvas>
+		<div id="export" style="hidden"></div>
+		<div id="language" class="fade-out">
+			<img id="fr" class="flag" src='img/fr-flag.png' />
+			<img id="en" class="flag" src='img/en-flag.png' />
+			<img id="sp" class="flag" src='img/sp-flag.png' />
+		</div>
+		<div id="links" class="fade-out">
+			<a class="pin" href='http://www.linkedin.com/pub/amaury-brisou/7a/22a/445' target="_blank" ><img class='pin' src='img/linkedin.png'/></a>
+			<a class="pin" href='export/cv_amaury_brisou.pdf' target="_blank" ><img id="cv_pdf" class="pin" src="img/cv.png"/></a>
+		</div>
+		
+		<img usemap="#img_map" id="img_back" class="click" src="img/seignosse.jpg"/>
+		<div id="labels" >
+			<div class="label area fade-out click" id="who" filename="who"></div>
+			<div class="area fade-out click" id="contact" filename="contact"></div>
+			<div class="area click" id="contact_loupe" filename='contact'></div>
+			<div class="label area fade-out click" id="github" filename="github"></div>
+			<div class="label area fade-out click" id="blog" filename="blog"></div>
+			<div class="label area fade-out click" id="artwork" filename="artwork"></div>
+		</div>
 		<div id="main_modal" class="fade-out size-down close">
 			<div id="modal_content" class="fade-out size-down">
+				<div id="close" class="close" onmousedown="javascript:CloseModal;"></div>
 				<div id="info_left" class='fade-out size-down'></div>
+				
 				<div id="info_right" class='not-selected fade-out'>
-					<div id='table_entry_info'></div>
-					<div id='table_entry_img'></div>
+					<div id='table_entry_info' ></div>
+					<div id='table_entry_img' ></div>
 				</div>
-				<p class="close" onmousedown="javascript:CloseModal;">X</p>
+
+				<div id="modal_labels">
+					<div class="modal_label click" id="modal_who" filename="who"></div>
+					<div class="modal_label click" id="modal_contact" filename="contact"></div>
+					<div class="modal_label click" id="modal_github" filename="github"></div>
+					<div class="modal_label click" id="modal_blog" filename="blog"></div>
+					<div class="modal_label click" id="modal_artwork" filename="artwork"></div>
+				</div>
+
 			</div>
 		</div>
 		
-	</div>
-	
+		
 
 
 
 	<script type="text/javascript">
 	
-		//avoid image dragging
-		document.body.ondragstart = function() { return false; };
-		var label_timeout = 5000;
-		var main = $('main');
 		
-		main.innerHTML += '<img usemap="#img_map" id="img_back" class="click" src="img/seignosse.jpg"/>';
 
 		<!--//--><![CDATA[//><!--
 
 			var images =  [
 					{
-						label_x: 1550, 
-						label_y: 830, 
-						label_pos_x: 70, 
-						title: 'Projects', 
+						 
+						title: 'who', 
 						file: new Image().src  = 'img/wave.png', 
 						coords : [{x:0,y:860, _x:585, _y:1100},
-								{x:650,y:860, _x:2500, _y:1100},
-								{x:1550,y:750, _x:1650, _y:869}]
+								{x:650,y:860, _x:2500, _y:1100}]
 					}, //levre
 					{
-						label_x: 2000, 
-						label_y: 1403, 
-						label_pos_x: 70, 
-						title: 'Blog', 
+						
+						title: 'blog', 
 						file: new Image().src  = 'img/poto_droite.png', 
-						coords : [{x:2100, y:1303, _x:2717, _y:1923},
-									{x:2000,y:1303, _x:2220, _y:1465}]
+						coords : [{x:2100, y:1303, _x:2717, _y:1923}]
 					}, //poto droite
 					{
-						label_x: 420,
-						label_y: 700,  
-						label_pos_x: 70, 
-						title: 'Artwork', 
+						
+						title: 'artwork', 
 						file: new Image().src  = 'img/poto_gauche.png', 
-						coords :[{x:586, y:0, _x:642, _y:(1920)},
-								{x:400,y:600, _x:585, _y:850}]
+						coords :[{x:586, y:0, _x:642, _y:(1920)}]
 					}, //poto left
 					{
-						label_x: 1190, 
-						label_y: 1230, 
-						label_pos_x: 70, 
-						title: 'Github', 
+						
+						title: 'github', 
 						file: new Image().src  = 'img/poto_centre.png', 
-						coords : [{x:1330, y:1038, _x:(1365), _y:(1038 + 882)},
-								{x:1180,y:1138, _x:1329, _y:1338}]
+						coords : [{x:1330, y:1038, _x:(1365), _y:(1038 + 882)}]
 					},//poto centre
 					{
-						label_x: 1505,
-						label_y: 1560, 
-						label_pos_x: -70, 
-						title: 'Contact', 
+
+						title: 'contact', 
 						file: new Image().src  = 'img/mouette.png', 
-						coords : [{x:1390, y:1630, _x:1450, _y:1680},
-									{x:1451,y:1430, _x:1602, _y:1680}]
+						coords : [{x:1390, y:1630, _x:1450, _y:1680}]
 					}
 				]; //mouette
+			var label_timeout = 5000;
+			var attach = document.body;
 		
 		//--><!]]>
 
-		main.innerHTML += '<map id="img_map" name="img_map" >';
-		
-		var map = $("img_map");
-		var h = (window.innerHeight / 1920);
-		var w = (window.innerWidth / 2560);
+		window.onload = function(){
+			lang = "fr";
+			//avoid image dragging
+			document.body.ondragstart = function() { return false; };
 
-		for( var i = 0; i < images.length; i++){
-			map.innerHTML += "<img src='"+images[i].file+"' class='img fade-out' />";
-			
-			for(var j = 0; j < images[i].coords.length; j++){
-				coords = images[i].coords[j];
+			init_map();
+			init_events();
+			init_language();
+			init_labels();
+
+			document.onmousemove = onMouseMove;
+			$('main_modal').onmousedown = $('main_modal').click = CloseModal;
+		}
+
+		function init_language(){
+			if(!lang){
+				lang = "fr";
+			}
+
+			lang_content = JSON.parse(getPage('lang/'+lang+'.json'));
+
+		}
+
+		function init_labels(){
+
+			var entry, attach, img_attach;
+
+			for(var i = 0; i < lang_content.labels.length; i++){
+				entry = lang_content.labels[i];
 				
-				map.innerHTML += '<area id="img_'+i+'_'+j+'" shape="rect" class="area click" title="'+images[i].title+'" coords="'+
-					Number(coords.x * w).toFixed(2)+','+
-					Number(coords.y * h).toFixed(2)+','+
-					Number(coords._x * w).toFixed(2)+','+
-					Number(coords._y * h).toFixed(2)+'" />';
-			}
-		}
-		main.innerHTML += ' </map> ';
+				attach = $(entry.id);
+				
+				img_attach = getElementsByClassName(entry.id, $('img_map'), 'area');
+				if(attach){
+					attach.innerHTML = entry['value'];
+				}
 
+				attach = $('modal_'+entry.id);
+				if(attach){
+					attach.innerHTML = entry["value"];
+				}
+				if(img_attach){
+					for(var j = 0; j < img_attach.length; j++){
+						img_attach[j].title = entry['value'];
+					}
+				}
+			}
 		
-		for(var i = 0; i < images.length; i++){
-			for(var j in images[i].coords){
+		}
+		
+		
+		
+
+		function init_map(){
+			document.body.innerHTML += '<map id="img_map" name="img_map" >';
 			
-				img = $('img_'+i+'_'+j);
-				img.onmousedown = onMouseClick;
-				img.onmouseover =  onMouseOver;
-			}
-		}
-
-		
-		var ctx = getContext();
-		ctx.globalAlpha = 1;
-
-		document.onmousemove = onMouseMove;
-
-		
-
-		function Labels(alpha){
-
+			var map = $("img_map");
 			var h = (window.innerHeight / 1920);
 			var w = (window.innerWidth / 2560);
 
-			
-			ctx = getContext();
-			clearContext(ctx);
-			var x, y, image;
-			for(var i = 0; i < images.length; i++){
+			for( var i = 0; i < images.length; i++){
+				map.innerHTML += "<img id='img_"+images[i].title+"' src='"+images[i].file+"' class='img fade-out' />";
 				
-				image = images[i];
+				for(var j = 0; j < images[i].coords.length; j++){
+					coords = images[i].coords[j];
+					
+					map.innerHTML += '<area id="img_'+i+'_'+j+'" shape="rect" class="area click '+images[i].title+'" title="'+images[i].title+'" filename="'+images[i].title+'" coords="'+
+						Number(coords.x * w).toFixed(2)+','+
+						Number(coords.y * h).toFixed(2)+','+
+						Number(coords._x * w).toFixed(2)+','+
+						Number(coords._y * h).toFixed(2)+'" />';
+				}
+			}
+			document.body.innerHTML += ' </map> ';
+		}
 
-				x = (image.label_x * w);
-		
-				y = (image.label_y * h);
-		
-				ctx.globalAlpha = alpha;
-				ctx.font= "15px Georgia";
-				ctx.fillStyle = "rgba(50,50,60,1)";
-				ctx.strokeStyle= "rgba(50,50,60,1)";
 
-				var txt_len =  ctx.measureText(image.title).width;				
+		function init_events(){
+			var areas = getElementsByClassName('area', document.body);
+			
+			
+			var area;
+			for(var i = 0; i < areas.length; i++){
 
-				ctx.beginPath();
-				ctx.moveTo(x, y);
-				ctx.lineTo(x + txt_len, y );
-				ctx.stroke();
+				area = areas[i];
+				
 
-				var new_x = x + txt_len;
-				if(image.title === "Contact") new_x = x;
+				area.onmouseover = area.onmousenter = onMouseOver;
+				area.onmouseout = area.onmouseleave = onMouseOut;
+			}
 
-				ctx.moveTo(new_x, y);
-				ctx.lineTo(new_x + (image.label_pos_x * w), y + 40 * h);
-				ctx.stroke();
+			var clicks = getElementsByClassName('click', document.body);
+			
+			var click;
+			for(var i = 0; i < clicks.length; i++){
 
-				ctx.beginPath();
-				ctx.arc(new_x + (image.label_pos_x * w), y + 40 * h , 2, 0,2*Math.PI);
-				ctx.stroke();	
-
-				ctx.fillText(image.title, x  , y - (5 * h));
+				click = clicks[i];
+				
+				click.onmousedown = onMouseClick;
 
 			}
+
+			
+			var target = $('language');
+			if(target){
+				target.onMouseMove = onMouseMove;
+				target.onmousedown = change_language;
+			}
+
+			/*target = $('cv_pdf');
+			target.onmousedown = exportToPdf;*/
+		}
+
+		function onMouseOver(e){
+
+			if (e == null) e = window.event;
+			var target = e.target != null ? e.target : e.srcElement;
+			var img;
+			
+			if(hasClass(target, 'area')){
+				img = $('img_'+target.getAttribute('filename'));
+			} else {
+				img = prev(target,'img');
+			}
+
+			fadeIn(img);
+		}
+
+		var old_over_title;
+		function onMouseOut(m_e){
+
+			if (m_e == null) m_e = window.event;
+			var target = m_e.target != null ? m_e.target : m_e.srcElement;
+			var img;
+
+			if(hasClass(target, 'area')){
+				img = $('img_'+target.getAttribute('filename'));
+			} else {
+				img = prev(target,'img');
+			}
+
+			fadeOut(img, 0);
+		}
+
+
+
+
+		function change_language(e){
+			if (e == null) e = window.event;
+			var target = e.target != null ? e.target : e.srcElement;
+
+			if(target.getAttribute('id') === "language") return;
+
+			lang = target.getAttribute('id');
+
+			init_language();
+			init_labels();
 		}
 
 		window.onresize = function(){
@@ -188,56 +274,52 @@
 				}
 			}
 
-			Labels(1);
+			//Labels(1);
 		}
 
-		var timeout = null, activated = false;
+		var timeout = null;
 		function onMouseMove(e){
-			var label = $('labels');
 
-			if(hasClass(label, 'fade-out')){
-				removeClass(label, 'fade-out');
-				addClass(label, 'fade-in');
-				setTimeout(function(){
-					removeClass(label, 'fade-in');
-					addClass(label, 'fade-out');
-				}, label_timeout);
-			} else {
-				clearTimeout(label);
+			var labels = getElementsByClassName('fade-out', $('labels'));
+			labels.push($('language'));
+			labels.push($('links'));
+
+			var label;
+			for(var i = 0; i < labels.length; i++){
+				label = labels[i];
+				if(hasClass(label, 'fade-out')){
+					removeClass(label, 'fade-out');
+					addClass(label, 'fade-in');
+					
+					(function(elem){
+						setTimeout(function(){
+							if(hasClass(elem, 'fade-in')){
+								removeClass(elem, 'fade-in');
+								addClass(elem, 'fade-out');	
+								return true;
+							}
+						}, label_timeout);
+					}(label));	
+
+				} else {
+					clearTimeout(label);
+				}
+
 			}
 		}
-
-
-
-		function onMouseOver(e){
-			if (e == null) e = window.event;
-			var target = e.target != null ? e.target : e.srcElement;	
-			var s = prev(target,'img');
-
-			if(!hasClass(s, 'fade-in')){
-				addClass(s, 'fade-in');	
-			}		
-
-			target.onmouseout = target.onmouseleave =  function(e){
-				fadeOut(s, 0);
-			}
-		}
-
-		$('main_modal').onmousedown = $('main_modal').click = CloseModal;
+		
 
 		function CloseModal(e){
+
 			if (e == null) e = window.event;
 			var target = e.target != null ? e.target : e.srcElement;
-				
+
 			if(hasClass(target, 'close')){
-				target = $('main_modal');
-				fadeOut(target, 1000);
-				sizeDown(target);
 				
-				target = $('modal_content');
-				fadeOut(target);
-				sizeDown(target);
+				$('table_entry_info').removeAttribute("style");
+
 				
+				unhide(getElementsByClassName('hide', $('modal_labels') , 'div')[0]);
 
 				target = $('info_right');
 				fadeOut(target);
@@ -247,32 +329,51 @@
 				fadeOut(target);
 				sizeDown(target);
 
+				target = $('main_modal');
+				fadeOut(target);
+				sizeDown(target);
 				
-				$('table_entry_img').innerHTML = $('table_entry_info').innerHTML = " ";
+				target = $('modal_content');
+				fadeOut(target);
+				sizeDown(target);
+				
+				clearClass(target);
+				addClass(target, "fade-out size-down");
 			};
-			
 		}
 
 		function onMouseClick(e){
-			e.preventDefault();
 			if (e == null) e = window.event;
 			var target = e.target != null ? e.target : e.srcElement;
+			
+			if(hasClass(target, 'click') && target.id !== "img_back"){
 
-			if(hasClass(target, 'click')){
-
-				if(target.title === "Github"){
+				if(target.getAttribute('filename') === "github"){
 					window.open("https://github.com/amaurybrisou", "_blank", '', false);
 					return;
 				}
-				if(target.title === "Blog"){
+				if(target.getAttribute('filename') === "blog"){
 					window.open("http://puzzledge.org", "_blank", '', false);
 					return;
 				}
 				
+				if(hasClass(target, 'modal_label')){
+					$('table_entry_info').removeAttribute("style");
+					unhide(getElementsByClassName('hide', $('modal_labels') , 'div')[0]);
+					var t = $('info_left');
+					fadeOut(t);
+					sizeDown(t);
+				}
+
+				hide($('modal_'+target.getAttribute("filename")));
+
+				//reset content
+				$('table_entry_img').innerHTML = "";
+
 				var info_left = $("info_left");
 
 				(function(callback){
-					var ret = getPage(target.title.toLowerCase());
+					var ret = getPage('views/'+target.getAttribute('filename')+'.html');
 					callback(ret);
 				}(function(data){
 					info_left.innerHTML = data;
@@ -281,6 +382,8 @@
 					show($('main_modal'));
 
 				}));
+
+
 			}
 		}
 
@@ -289,27 +392,21 @@
 			sizeIn(main_modal);
 			var modal_content = $('modal_content');
 			fadeIn(modal_content);
-			sizeIn(modal_content);			
+			sizeIn(modal_content);	
+			var info_right = $('info_right');
+			fadeIn(info_right);
+			sizeIn(info_right);
 		}
 
-		var getPage = function(t){
-			var xhr = new XMLHttpRequest(), ret = "";
-			xhr.open('GET', 'views/'+t+'.html', false);
-			xhr.onreadystatechange= function() {
-			    if (this.readyState!==4) return;
-			    if (this.status!==200) return; // or whatever error handling you want
-			    ret = this.responseText;
-			};
-			xhr.send();
-			return ret;
+		
+		function exportToPdf(){
 			
+ 			$('export').innerHTML = getPage('views/export.html');
+ 			
+ 			exec_body_scripts($('export'));
 		}
-
 		
-		
-		Labels(1);
-
-		
+		onMouseMove();
 		</script>
 	
 </body>

@@ -1,0 +1,41 @@
+<style type="text/css">
+.photo_info {
+	-moz-border-radius:10px 10px 10px 10px;
+	-webkit-border-radius:10px 10px 10px 10px;
+	border-radius:10px 10px 10px 10px;
+}
+</style>
+
+<script type="text/javascript">
+(function(){
+
+	if(!lang_content) throw "Error Reading lang variable";
+
+	var projects_data = lang_content.who;	
+	var bio_label = projects_data.bio;
+	var asso_label = projects_data.asso;
+	var loisir_label = projects_data.loisir;
+
+	var content = projects_data.content;
+
+	var attach = $('table_entry_info');
+	if(content.bio){
+		attach.innerHTML = '<h4 class="label_info">'+bio_label+'</h4><p>'+content.bio+'</p>';
+	}
+
+	if(content.asso){
+		attach.innerHTML += '<h4 class="label_info">'+asso_label+'</h4><p>'+content.asso+'</p>';
+	}
+
+	if(content.loisir){
+		attach.innerHTML += '<h4 class="label_info">'+loisir_label+'</h4><p>'+content.loisir+'</p>';
+	}
+	
+	if(content.photo){
+		attach.innerHTML += '<img class="photo_info" src="img/'+content.photo+'"/>';
+	}
+	
+
+}());
+
+</script>

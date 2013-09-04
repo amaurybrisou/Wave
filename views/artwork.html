@@ -1,5 +1,8 @@
 <style type="text/css">
-	#info_left, #table {
+
+	
+
+	#info_left, #table, #info_right {
 		-webkit-transition: opacity 1s ease 0.75s, height 1s ease 0.1s, width 0.5s ease 0.5s;/* transition pour Chrome et Safari */
 	    -moz-transition: 	opacity 1s ease 0.75s, height 1s ease 0.1s, width 0.5s ease 0.5s;/* transition pour Firefox */
 	    -o-transition: 		opacity 1s ease 0.75s, height 1s ease 0.1s, width 0.5s ease 0.5s;/* transition pour Opéra */
@@ -29,36 +32,43 @@
 
 	#table.size-up {
 		width: 100%;
-		height: auto;
+		height: 90%;
 		max-height: 90%;
 	}
 	
 	#table {
 		border-spacing: 1%;
+		overflow-y: auto;
 	}
 
 	#table .list_entry {
-		height: 25px;
+		font-size: 13px;
+		height: 30px;
 		margin-bottom: 1%;
 		text-align: center;
-		line-height: 20px;
+		line-height: 15px;
 		-moz-border-radius:10px 10px 10px 10px;
 		-webkit-border-radius:10px 10px 10px 10px;
 		border-radius:10px 10px 10px 10px;
 	}
 
-	#table .not-selected {
-		cursor: auto;
-		background-color: rgb(161,166,172);
+	a, a:visited, a:link, a:hover  {
+		color: #000000;
+		text-decoration: none;
 	}
-	#table .selected {
+
+	.selected {
 		cursor: pointer;
 		background-color: rgba(70,95,91,0.5);
+	}	
+
+	.table_entry_info > a:hover {
+		cursor: pointer;
+		text-decoration: underline;
 	}
 
 	#info_right, #table .list_entry {
-		padding: 2%;
-
+		padding: 1%;
 		border: 1px solid rgba(70,95,91,0.5);
 	}
 
@@ -67,151 +77,225 @@
 		position: relative;
 		margin-left: 1%;
 		height: 90%;
-		width: 70%;
-
-		/*may be deleted later*/
-		min-height: 270px;
-		
-		-webkit-transition: opacity 0.5s ease-in-out;/* transition pour Chrome et Safari */
-	    -moz-transition: 	opacity 0.5s ease-in-out;/* transition pour Firefox */
-	    -o-transition: 		opacity 0.5s ease-in-out;/* transition pour Opéra */
-	    transition: 		opacity 0.5s ease-in-out;*/ 	
+		width: 74%;
+		overflow-y: auto;
+		padding: 1%;
 	}
-
 
 	#table_entry_info {
-		/*float: left;
-		width: 96%;
-		height: auto;*/
-		padding: 2%;
-		bottom: 5%;
-	
+		padding: 1%;
+		position: relative;
 	}
+
+	.table_entry_info {
+		margin-left: 5%;
+		margin-right: 3%;
+		line-height: 20px;
+		position: absolute;
+		margin-bottom: 4%;
+	}
+
 
 
 	#table_entry_img {
-		position: absolute;
-		bottom: 5%;
-		/*float: left;*/
-		width: 94%;
-		height: 60%;		
+		position: relative;
 	}
 
 	.info_right_img {
 		position: absolute;
-		width: 100%;
-		height: 100%;
-		-webkit-transition: opacity 0.5s ease-in-out;/* transition pour Chrome et Safari */
-	    -moz-transition: 	opacity 0.5s ease-in-out;/* transition pour Firefox */
-	    -o-transition: 		opacity 0.5s ease-in-out;/* transition pour Opéra */
-	    transition: 		opacity 0.5s ease-in-out;*/ 
+		height: auto;
+		width: 100%;		
 	}
+
+	
+	.table_entry_info, .info_right_img {
+		-webkit-transition: opacity 0.7s ease-out, visibility ease 0.35s;
+	    -moz-transition: 	opacity 0.7s ease-out, visibility ease 0.35s;
+	    -o-transition: 		opacity 0.7s ease-out, visibility ease 0.35s;
+	    transition: 		opacity 0.7s ease-out, visibility ease 0.35s;
+	}
+
+	.table_entry_info.fade-in, .info_right_img.fade-in {
+		visibility: visible;
+	}
+
+	.table_entry_info.fade-out, .info_right_img.fade-out {
+		visibility: hidden;
+	}
+
+
+	.techno, .problem, .url, .action, .idea, .info_right_img {
+		
+		margin-bottom: 2%;
+	}
+
+	.info_label {
+		
+		text-align: center;
+		margin-bottom: 5px;
+	}
+
 
 </style>
 
 <script type="text/javascript">
-	(function(){
+	(function(){	
+	
 
-		ajax();
+		if(!lang_content) throw "Error Reading lang variable";
 
-		function ajax()
-		{
-		    var xhr;
+		var artwork_data = lang_content.artwork.content;	
+		var techno_label = lang_content.artwork.techno;
+		var problem_label = lang_content.artwork.problem;
+		var action_label = lang_content.artwork.action;
+		var url_label = lang_content.artwork.url;
 		 
-		    if (window.XMLHttpRequest) { 
-		        xhr = new XMLHttpRequest();
-		    }
-		    else if (window.ActiveXObject) 
-		    {
-		        xhr = new ActiveXObject("Microsoft.XMLHTTP");
-		    }
-		    xhr.onreadystatechange = function() { ajax_callback(xhr); };
-		 
-		    //on appelle le fichier reponse.txt
-		    xhr.open("GET", "controllers/list_dir.php", true);
-		    xhr.send(null);
+		parseJson(artwork_data);
+		
+		var info_left = $('info_left');
+		if(fadeIn(info_left) && sizeIn(info_left)){
+			
+			var table = $('table');
+			sizeIn(table);
+
+			var table_entry_0 = $('table_entry_0');
+			selectIn(table_entry_0);
+
+			var table_entry_info_0 = $('table_entry_info_0');
+			fadeIn(table_entry_info_0);
+
+			setTimeout(function(){
+				$('table_entry_info').style.height = (getHeight(table_entry_info_0)) +'px';
+			}, 800);
+
+			var table_entry_img_0 = $('table_entry_img_0');
+			fadeIn(table_entry_img_0);
+			
 		}
-		
 
 		
-		function ajax_callback(xhr)
-		{	
+
+		var table_entry_img, table_entry_info, old_table_entry = undefined;
+		$('table').onmouseover = function(e){
+			if (e == null) e = window.event;
+			target = e.target != null ? e.target : e.srcElement;
+
+			if(target.getAttribute('id') === "table" || target.tagName === "A") {
+				return;
+			}
+
+			if(old_table_entry === undefined && table_entry_img === undefined) {
+				old_table_entry = $('table_entry_0'); 
+				table_entry_img = $('table_entry_img_0');
+				table_entry_info = $('table_entry_info_0');
+			}
+
+			if(target === old_table_entry) return;
+
 			
-			if (xhr.readyState!==4) return;
-		    if (xhr.status!==200) return;
+			selectOut(old_table_entry);
+			fadeOut(table_entry_img);
+			fadeOut(table_entry_info);
+
+			var offset = target.getAttribute('offset');
+
+			table_entry_img = $('table_entry_img_'+offset);
+			table_entry_info = $('table_entry_info_'+offset);
 			
-			var ret_data = JSON.parse(xhr.responseText);
-			var entry, attach = $('info_left');
+			fadeIn(table_entry_img);
+			fadeIn(table_entry_info);
+			selectIn(target);
+
+			$('table_entry_info').style.height = (getHeight(table_entry_info)) +'px';
+
+
+			old_table_entry = target;
+	
+		}
+
+
+
+		function parseJson(artwork_data){
 			
+			var entry,
+				attach = $('info_left'),
+				info_right = $('info_right'),
+				table_entry_info = $('table_entry_info'),
+				table_entry_img = $('table_entry_img');
+
+		
 			attach.innerHTML += "<div id='table' class='size-down'>";
-
 			attach = $('table');
-			var info_right = $('info_right');
+		
+		
+			table_entry_info.innerHTML = "";
 
-			for(var i = 0; i < ret_data.length; i++){
-				entry = JSON.parse(ret_data[i]);
-				attach.innerHTML += "<div id='table_entry_"+i+"' url='"+entry.url+"' class='list_entry not-selected' content='"+entry.content+"'>"+entry.title+"</div>";
-				if(entry.img){
-					$('table_entry_'+i).setAttribute('img', i);
+			for(var i = 0; i < artwork_data.length; i++){
+				entry = artwork_data[i];
+				
+				if(entry.content.url){
+					attach.innerHTML += "<div id='table_entry_"+i+"' class='list_entry not-selected' content='"+i+"'>"+entry.title+"</div>";
+				} else {
+					attach.innerHTML += "<div id='table_entry_"+i+"' class='list_entry not-selected' content='"+i+"'>"+entry.title+"</div>";
+				}
+				
+				if(entry.content.url){
+					$('table_entry_'+i).setAttribute('url', entry.content.url);
 				}
 
-				$('table_entry_img').innerHTML += "<img id='table_entry_img_"+i+"'  class='info_right_img fade-out' src='img/"+entry.img+"'/>";
+				$('table_entry_'+i).setAttribute('offset', i);
+				
+				table_entry_info.innerHTML += "<div id='table_entry_info_"+i+"' class='table_entry_info  fade-out'></div>";
+				parseJsonEntry($('table_entry_info_'+i), entry, i);
+
+				if(entry.content.img){
+					table_entry_img.innerHTML += "<a href='"+entry.content.url+"' target='_blank'><img id='table_entry_img_"+i+"'  class='info_right_img fade-out' src='img/"+entry.content.img+"'/></a>";
+				}
+				
 			}
 
 			info_left = $('info_left');
 			info_left.innerHTML += "</div>";
-
-			if(fadeIn(info_left) && sizeIn(info_left)){
-				
-				table = $('table');
-				sizeIn(table);
-
-				table_entry_0 = $('table_entry_0');
-				selectIn(table_entry_0);
-
-				table_entry_img_0 = $('table_entry_img_0');
-				fadeIn(table_entry_img_0);
-
-				$('table_entry_info').innerHTML = JSON.parse(ret_data[0]).content;
-
-				fadeIn(info_right);
-			}
-
-			var table_entry_img, old_target = undefined;
-			$('table').onmouseover = function(e){
-				if (e == null) e = window.event;
-				target = e.target != null ? e.target : e.srcElement;
-
-				if(target.id === "table") return;
-
-				if(old_target !== undefined && table_entry_img !== undefined){ 
-					selectOut(old_target); 
-					fadeOut(table_entry_img);
-				}
-
-
-				table_entry_img = $('table_entry_img_'+target.getAttribute('img'));
-				fadeIn(table_entry_img);
-
-				selectIn(target);
-
-
-				$('table_entry_info').innerHTML = target.getAttribute('content');
-
-				old_target = target;
-		
-			}
-
-
-			$('table').onmousedown = function(e){
-				if (e == null) e = window.event;
-				var target = e.target != null ? e.target : e.srcElement;	
-				
-				window.open(target.getAttribute("url"), "_blank", false);
-			}
 		}
 
-		
+		function parseJsonEntry(elem, entry, offset){
+
+			var attach,
+				content = entry.content;
+
+			if(content.idea){
+				elem.innerHTML += '<p id="idea_'+offset+'" class="idea">'+content.idea+'</p>';
+			}
+			
+			if(content.techno){
+				elem.innerHTML += '<h4 class="info_label">'+techno_label+'</h4><ul id="techno_'+offset+'" class="techno">';
+				attach =  $('techno_'+offset);
+				for(var i = 0; i < content.techno.length; i++){
+					attach.innerHTML += '<li>'+content.techno[i]+'</li>';
+				}
+				elem.innerHTML += '</ul>';
+			}
+
+			if(content.action){
+				elem.innerHTML += '<h4 class="info_label">'+action_label+'</h4><p id="action_'+offset+'" class="action">'+content.action+'</p>';
+			}			
+
+			if(content.problem){
+				elem.innerHTML += '<h4 class="info_label">'+problem_label+'</h4><ul id="problems_'+offset+'" class="problems">';
+				attach = $('problems_'+offset);
+				for(var i = 0; i < content.problem.length; i++){
+
+					attach.innerHTML += '<li>'+content.problem[i]+'</li>';	
+				}
+				elem.innerHTML += '</ul>';
+			}
+
+			if(content.url){
+				elem.innerHTML += url_label+' <a id="url_'+offset+'" class="url" target="_blank" href="'+content.url+'" alt="'+content.url+'">'+entry.title+'</a>';
+			}
+			
+		}
 	}());
 </script>
+
 

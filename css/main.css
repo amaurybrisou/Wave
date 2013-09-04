@@ -4,8 +4,10 @@
 		var-top-modal: 10%;
 	}
 
-	* {
+	div, body {
 		margin: 0;
+		font:normal  15px "Courier New", Courier, monospace;
+		font: normal 14px "Lucida Console", Monaco, monospace;
 	     user-select: none;
 	    -khtml-user-select: none;
 	    -o-user-select: none;
@@ -13,19 +15,33 @@
 	    -webkit-user-select: none;
 	}
 
+	p {
+		text-align: justify;
+		/*text-justify: kashida;*/
+	}
+	
 	::selection { background: transparent;color:inherit; }
 	::-moz-selection { background: transparent;color:inherit; }
 
+	.hide {
+		visibility: hidden;
+		height: 0;
+		width: 0;
+		margin: 0;
+	}
+
 	.fade-out {
+		
 	    opacity: 0;
 	    -ms-filter: "prodig:DXImageTransform.Microsoft.Alpha(Opacity=0)";
 	    filter: alpha(opacity = 0); 
 	}
 	 
 	.fade-in {
+
 	    opacity: 1; 
 	    -ms-filter:"prodig:DXImageTransform.Microsoft.Alpha(Opacity=100)"; 
-	    filter: alpha(opacity = 100); 
+	    filter: alpha(opacity = 100); 	    
 	}
 
 	.size-up {
@@ -38,16 +54,36 @@
 		width: 0%;
 	}
 
+	#language, #links {
+		top: 1%;
+		position: absolute;
+		z-index: 1;
+	}
+
+	#language {
+		width: 100px;
+		left: 1%;
+	}
+
+	.flag, .pin {
+		width: 25px;
+		height: 25px;
+	}
+
+	#links {
+		margin-left: 10%;
+	}
+
 	#main_modal {
 
 		background-color: rgba(70,95,91, 0);
 		z-index: 3000;
 		position: fixed;
-
-		-webkit-transition: background-color 1s ease-in-out, height 1s ease-in-out, width 1s ease-in-out;
-	    -moz-transition:background-color 1s ease-in-out, height 1s ease-in-out, width 1s ease-in-out;
-	    -o-transition: background-color 1s ease-in-out, height 1s ease-in-out, width 1s ease-in-out;
-	    transition: background-color 1s ease-in-out, height 1s ease-in-out, width 1s ease-in-out;
+		text-align: center;
+		-webkit-transition: background-color 1s ease-in-out, height 1s ease-in-out, width 1s ease-in-out, opacity 0.5s ease-in-out 0.25s;
+	    -moz-transition:	background-color 1s ease-in-out, height 1s ease-in-out, width 1s ease-in-out, opacity 0.5s ease-in-out 0.25s;
+	    -o-transition: 		background-color 1s ease-in-out, height 1s ease-in-out, width 1s ease-in-out, opacity 0.5s ease-in-out 0.25s;
+	    transition: 		background-color 1s ease-in-out, height 1s ease-in-out, width 1s ease-in-out, opacity 0.5s ease-in-out 0.25s;
 
 	}
 
@@ -65,21 +101,16 @@
 		background-color: rgba(70,95,91, 0);
 	}
 
-
-
-
 	#modal_content {
 
-		padding: 2%;
+		padding: 1%;
 		z-index: 4000;
-		position:fixed;
-		left: 25%;
-		top: 25%;
+		margin: 10% auto auto auto;
 		background-color : rgb(161,166,172);
 		-moz-border-radius:10px 10px 10px 10px;
 		-webkit-border-radius:10px 10px 10px 10px;
 		border-radius:10px 10px 10px 10px;
-		overflow: hidden;
+		overflow: auto;
 
 	}
 
@@ -102,49 +133,109 @@
 		width: 50%;
 	}
 
-	
-	
-
-	#modal_content * {
-
+	#modal_content div {
+		text-align: justify;
 		-moz-border-radius:10px 10px 10px 10px;
 		-webkit-border-radius:10px 10px 10px 10px;
 		border-radius:10px 10px 10px 10px;	
 	}
 
-	
- 
-	
-
-
 	#modal_content .close {
+		background-image: url('../img/close.jpg');
 		float: right;
-		height: 1%;
-		width: 1%;
-		right: 1%;
-		top: 1%;
+		height: 16px;
+		width: 16px;
 	}
 
-	#modal_content .close:hover {
+	#modal_content .close:hover, .modal_label:hover {
 		cursor: pointer;
 	}
 
-	#labels {
-		height: 100%;
-		width: 100%;		
-		z-index: 2000;
-		pointer-events: none;
-		position: absolute;
-
-		-webkit-transition: opacity 0.5s ease-in-out;/* transition pour Chrome et Safari */
-	    -moz-transition: opacity 0.5s ease-in-out;/* transition pour Firefox */
-	    -o-transition: opacity 0.5s ease-in-out;/* transition pour Opéra */
-	    transition: opacity 0.5s ease-in-out; /* on écrit cette ligne à la fin de façon à ce que ce soit elle qui soit prise en compte lorsque l'attribut transition sera pris en compte par tous les navigateurs */
+	.modal_label {
+	    float: left;
+	    font-size: 12px;
+	    margin-left: 10%;
+	    margin-top: 2px;
+	    margin-bottom: 2px;
+	    text-align: justify;
+	    text-decoration: underline;
 	}
 
+
+	.label, .loupe, #language, #links {
+		-webkit-transition: opacity 0.5s ease;
+	    -moz-transition: 	opacity 0.5s ease;
+	    -o-transition: 		opacity 0.5s ease;
+	    transition: 		opacity 0.5s ease; 
+	}
+
+	.loupe:hover, .label:hover{
+		cursor: pointer;
+	}
+
+	#labels .label {
+		font-size: 90%;
+		text-decoration: underline;
+		height: 60px;
+		width: 150px;
+		z-index: 2000;
+		position: absolute;
+		background-image: url('../img/loupe.png');
+		background-repeat: no-repeat;
+		
+	}
+
+
+ 	#who {
+ 		
+		left: 50%;
+		top: 43%;
+		background-position: 98% 50%;
+	}
+
+	#contact {
+		font-size: 90%;
+		text-decoration: underline;
+		z-index: 2000;
+		position: absolute;
+		left: 58.5%;
+		top: 80%;
+		
+	}
+
+	#contact_loupe {
+		left: 56.4%;
+		top: 82%;
+		height: 40px;
+		width: 40px;
+		z-index: 2000;
+		position: absolute;
+		background-image: url('../img/flip-loupe.png');
+		background-repeat: no-repeat;
+		
+	}
 	
 
+	#github {
+		
+		left: 48.6%;
+		top: 57%;
+		background-position: 45% 50%;
+	}
 
+	#artwork {
+		left: 19.5%;
+		top: 28%;
+		background-position: 55% 50%;
+	}
+
+
+	#blog {
+		left: 81%;
+		top: 68%;
+		background-position: 35% 50%;
+
+	}
 
 	#img_back {
 		position: fixed;
@@ -158,17 +249,18 @@
 		height: 100%;
 		width: 100%;
 		z-index:1000; 
-		pointer-events:none;
+		pointer-events: none;
 	
-		-webkit-transition: opacity 0.2s ease-in-out;/* transition pour Chrome et Safari */
-	    -moz-transition: opacity 0.2s ease-in-out;/* transition pour Firefox */
-	    -o-transition: opacity 0.2s ease-in-out;/* transition pour Opéra */
-	    transition: opacity 0.2s ease-in-out; /* on écrit cette ligne à la fin de façon à ce que ce soit elle qui soit prise en compte lorsque l'attribut transition sera pris en compte par tous les navigateurs */	
+		-webkit-transition: opacity 0.4s ease-in-out;/* transition pour Chrome et Safari */
+	    -moz-transition: opacity 0.4s ease-in-out;/* transition pour Firefox */
+	    -o-transition: opacity 0.4s ease-in-out;/* transition pour Opéra */
+	    transition: opacity 0.4s ease-in-out; /* on écrit cette ligne à la fin de façon à ce que ce soit elle qui soit prise en compte lorsque l'attribut transition sera pris en compte par tous les navigateurs */	
 	}
 
-	.area:hover {
+	#img_map {
+		z-index: 2000;
+	}
+	
+	.area:hover, .img:hover {
 		cursor: pointer;
 	}
-
-	
-	

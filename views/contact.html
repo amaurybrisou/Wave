@@ -1,1 +1,58 @@
-<p><span style="text-decoration: underline;">Bonjour vous voici sur la page contact</span></p>
+<style type="text/css">
+
+#modal_content.size-up {
+	height: 45%;
+	width: 20%;
+	overflow: auto;
+}
+
+.modal_label {
+    margin-left: 10%;
+}
+
+#modal_contact {
+	margin: 0;
+}
+
+#table_entry_info {
+	
+	font-size: 13px;
+}
+
+#table_entry_info p {
+	font-size: 13px;
+}
+#table_entry_img {
+	
+	height: 340px;
+	-webkit-transition: opacity 0.5s ease-in-out, display 0s ease-in-out 0.55s;
+    -moz-transition: 	opacity 0.5s ease-in-out, display 0s ease-in-out 0.55s; 
+    -o-transition: 		opacity 0.5s ease-in-out, display 0s ease-in-out 0.55s;
+    transition: 		opacity 0.5s ease-in-out, display 0s ease-in-out 0.55s; 
+}
+
+</style>
+
+<script type="text/javascript">
+(function(){
+	if(!lang_content) throw "Error Reading lang variable";
+
+	var contact_data = lang_content.contact;
+
+	var attach = $('table_entry_info');
+	attach.innerHTML = '<p>'+contact_data.intro+'</p>';
+	
+	attach = $('table_entry_img');
+	attach.innerHTML += '<a id="foxyform_embed_link_129636" href="http://fr.foxyform.com/"></a>';
+
+	(function(d, t){
+	   var g = d.createElement(t),
+	       s = d.getElementsByTagName(t)[0];
+	   g.src = "http://fr.foxyform.com/js.php?id=129636&sec_hash=127b6d5761d&width=350px";
+	   s.parentNode.insertBefore(g, s);
+	}(document, "script"));
+
+
+}());
+
+</script>

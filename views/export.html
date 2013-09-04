@@ -1,0 +1,37 @@
+
+
+			<style type="text/css">
+
+</style>
+
+
+<script type="text/javascript">
+	(function(){
+		
+		if(!lang_content) throw "Error Reading lang variable";
+
+		var artwork_data = lang_content.artwork.content;
+		console.log(lang_content);
+		var output = "", margin = 0.5;
+		
+
+		var doc = new jsPDF();
+		
+		console.log(doc);
+
+		for (var i = artwork_data.length - 1; i >= 0; i--) {
+			var content = artwork_data[i].content;
+			
+			//if(content.img || content.problem || content.techno) continue;
+			doc.setFont('Helvetica','');
+			doc.setFontSize(13)
+			doc.splitTextToSize(content.idea, 10);
+		
+			doc.text(10 , (i+1) * 10, content.idea);
+		};
+
+		doc.save('amaury_brisou.pdf');
+		
+	}());
+
+</script>
