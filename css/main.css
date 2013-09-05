@@ -179,62 +179,36 @@
 		height: 60px;
 		width: 150px;
 		z-index: 2000;
-		position: absolute;
-		background-image: url('../img/loupe.png');
-		background-repeat: no-repeat;
-		
+		position: absolute;		
 	}
 
 
  	#who {
- 		
 		left: 50%;
 		top: 43%;
-		background-position: 98% 50%;
 	}
 
 	#contact {
-		font-size: 90%;
-		text-decoration: underline;
-		z-index: 2000;
-		position: absolute;
-		left: 58.5%;
-		top: 80%;
-		
+		left: 56%;
+		top: 82%;		
 	}
-
-	#contact_loupe {
-		left: 56.4%;
-		top: 82%;
-		height: 40px;
-		width: 40px;
-		z-index: 2000;
-		position: absolute;
-		background-image: url('../img/flip-loupe.png');
-		background-repeat: no-repeat;
-		
-	}
-	
 
 	#github {
 		
 		left: 48.6%;
 		top: 57%;
-		background-position: 45% 50%;
+		
 	}
 
 	#artwork {
 		left: 19.5%;
 		top: 28%;
-		background-position: 55% 50%;
 	}
 
 
 	#blog {
 		left: 81%;
 		top: 68%;
-		background-position: 35% 50%;
-
 	}
 
 	#img_back {
