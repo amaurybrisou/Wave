@@ -1,6 +1,9 @@
 <style type="text/css">
 
-	
+	#modal_content.size-up {
+		height: 465px;
+		width: 980px;
+	}
 
 	#info_left, #table, #info_right {
 		-webkit-transition: opacity 1s ease 0.75s, height 1s ease 0.1s, width 0.5s ease 0.5s;/* transition pour Chrome et Safari */
@@ -10,12 +13,7 @@
 	}
 
 	#info_left {
-		height: 50%;
 		float: left;
-		-moz-border-radius:10px 10px 10px 10px;
-		-webkit-border-radius:10px 10px 10px 10px;
-		border-radius:10px 10px 10px 10px;
-
 	}
 
 	
@@ -26,18 +24,20 @@
 	}
 	
 	#info_left.size-up {
-		width: 20%;
+		width: 21%;
 		height: 100%;
+		/*width: 210px;
+		height: 445px;*/
 	}
 
 	#table.size-up {
 		width: 100%;
-		height: 90%;
-		max-height: 90%;
 	}
 	
 	#table {
 		border-spacing: 1%;
+		height: 90%;
+		width: 200px;
 		overflow-y: auto;
 	}
 
@@ -53,8 +53,7 @@
 	}
 
 	a, a:visited, a:link, a:hover  {
-		color: #000000;
-		text-decoration: none;
+		color: #3D5D69;
 	}
 
 	.selected {
@@ -68,31 +67,33 @@
 	}
 
 	#info_right, #table .list_entry {
-		padding: 1%;
+		padding: 5px;
 		border: 1px solid rgba(70,95,91,0.5);
 	}
 
 	#info_right {
 		float: left;
 		position: relative;
-		margin-left: 1%;
-		height: 90%;
-		width: 74%;
+		margin-left: 10px;
+		/*height: 400px;
+		width: 710px;*/
+		height: 88%;
+		width: 73%;
 		overflow-y: auto;
-		padding: 1%;
+		padding: 10px;
 	}
 
 	#table_entry_info {
-		padding: 1%;
+		padding: 5px;
 		position: relative;
 	}
 
 	.table_entry_info {
-		margin-left: 5%;
-		margin-right: 3%;
-		line-height: 20px;
+		margin-left: 35px;
+		margin-right: 20px;
+		line-height: 25px;
 		position: absolute;
-		margin-bottom: 4%;
+		margin-bottom: 25px;
 	}
 
 
@@ -102,7 +103,6 @@
 	}
 
 	.info_right_img {
-		position: absolute;
 		height: auto;
 		width: 100%;		
 	}
@@ -125,14 +125,11 @@
 
 
 	.techno, .problem, .url, .action, .idea, .info_right_img {
-		
 		margin-bottom: 2%;
 	}
 
 	.info_label {
-		
 		text-align: center;
-		margin-bottom: 5px;
 	}
 
 
@@ -192,7 +189,8 @@
 
 			if(target === old_table_entry) return;
 
-			
+			$('info_right').scrollTop = 0;
+
 			selectOut(old_table_entry);
 			fadeOut(table_entry_img);
 			fadeOut(table_entry_info);
@@ -208,7 +206,6 @@
 
 			$('table_entry_info').style.height = (getHeight(table_entry_info)) +'px';
 
-
 			old_table_entry = target;
 	
 		}
@@ -220,9 +217,7 @@
 			var entry,
 				attach = $('info_left'),
 				info_right = $('info_right'),
-				table_entry_info = $('table_entry_info'),
-				table_entry_img = $('table_entry_img');
-
+				table_entry_info = $('table_entry_info');
 		
 			attach.innerHTML += "<div id='table' class='size-down'>";
 			attach = $('table');
@@ -235,8 +230,10 @@
 				
 				if(entry.content.url){
 					attach.innerHTML += "<div id='table_entry_"+i+"' class='list_entry not-selected' content='"+i+"'>"+entry.title+"</div>";
-				} else {
-					attach.innerHTML += "<div id='table_entry_"+i+"' class='list_entry not-selected' content='"+i+"'>"+entry.title+"</div>";
+				}
+
+				if(entry.content.perso){
+					attach.innerHTML += artwork_data.post;
 				}
 				
 				if(entry.content.url){
@@ -247,10 +244,6 @@
 				
 				table_entry_info.innerHTML += "<div id='table_entry_info_"+i+"' class='table_entry_info  fade-out'></div>";
 				parseJsonEntry($('table_entry_info_'+i), entry, i);
-
-				if(entry.content.img){
-					table_entry_img.innerHTML += "<a href='"+entry.content.url+"' target='_blank'><img id='table_entry_img_"+i+"'  class='info_right_img fade-out' src='img/"+entry.content.img+"'/></a>";
-				}
 				
 			}
 
@@ -266,19 +259,6 @@
 			if(content.idea){
 				elem.innerHTML += '<p id="idea_'+offset+'" class="idea">'+content.idea+'</p>';
 			}
-			
-			if(content.techno){
-				elem.innerHTML += '<h4 class="info_label">'+techno_label+'</h4><ul id="techno_'+offset+'" class="techno">';
-				attach =  $('techno_'+offset);
-				for(var i = 0; i < content.techno.length; i++){
-					attach.innerHTML += '<li>'+content.techno[i]+'</li>';
-				}
-				elem.innerHTML += '</ul>';
-			}
-
-			if(content.action){
-				elem.innerHTML += '<h4 class="info_label">'+action_label+'</h4><p id="action_'+offset+'" class="action">'+content.action+'</p>';
-			}			
 
 			if(content.problem){
 				elem.innerHTML += '<h4 class="info_label">'+problem_label+'</h4><ul id="problems_'+offset+'" class="problems">';
@@ -289,11 +269,28 @@
 				}
 				elem.innerHTML += '</ul>';
 			}
+			
+			if(content.techno){
+				elem.innerHTML += '<h4 class="info_label">'+techno_label+'</h4><ul id="techno_'+offset+'" class="techno">';
+				attach =  $('techno_'+offset);
+				for(var i = 0; i < content.techno.length; i++){
+					attach.innerHTML += '<li>'+content.techno[i]+'</li>';
+				}
+				elem.innerHTML += '</ul>';
+			}
+
+			if(content.img){
+				elem.innerHTML += "<a href='"+content.url+"' target='_blank'><img id='table_entry_img_"+offset+"'  class='info_right_img fade-out' src='img/"+content.img+"'/></a>";
+			}
 
 			if(content.url){
 				elem.innerHTML += url_label+' <a id="url_'+offset+'" class="url" target="_blank" href="'+content.url+'" alt="'+content.url+'">'+entry.title+'</a>';
 			}
-			
+
+
+			if(content.action){
+				elem.innerHTML += '<h4 class="info_label">'+action_label+'</h4><p id="action_'+offset+'" class="action">'+content.action+'</p>';
+			}			
 		}
 	}());
 </script>

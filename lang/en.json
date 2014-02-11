@@ -1,0 +1,251 @@
+{
+	"photo": "Wave of Seignosse - Landes - South-West of France",
+	"labels" : [
+		{
+			"id" : "who",
+			"value": "Who I am ?"
+		},
+		{
+			"id": "blog",
+			"value": "Blog"			
+		},
+		{
+			"id": "artwork",
+			"value": "Artwork"
+		},
+		{
+			"id": "github",
+			"value": "Github"
+		},
+		{
+			"id": "contact",
+			"value": "Contact"
+		}
+	],
+	"artwork" :
+			{
+				"techno" : "Technologies & Useful Tools",
+				"problem" : "Problems",
+				"action" : "I did",
+				"url" : "Link related to the topic :",
+				"perso": "Personal",
+				"content" : 
+				[
+					{
+						"title": "Sanspapier.com",
+						"content" : { 
+							"idea" : "Sanspapier.com was an independent french digital bookshop. I worked on that project during the 2012-2013 period.",
+							"action": "Of the five people of the working team, I was the indispensable referent to the validation of the technologies used to advance the project. I was an analyst developer and a researcher on the various programs (tools) detailed under.<p>CThese tools enabled to achieve a complete «  manufacturing cycle »  of the data used in the engine search.</p><ul><li>First, collecting book reviews on internet : Nutch Crawler</li><li>Second, determining which data \"deal with\" some book : Filter job.</li><li>Third, dividing these texts into keywords et weight them : keyword generator</li><li>Last, to create some book lists whose keywords are similar : Top20Generator.</li></ul>We will find then these recommandation lists under the appearance of \"turning plate\" on the sanspapier.com website : Front Sanspapier.</p>",
+							"img": "sp.jpg",
+							"url": "http://sanspapier.com"
+						}
+					},
+					{ 
+						"title": "Nutch Crawler",
+						"content" : { 
+							"idea": "Apache Nutch was an important tool for the advancement of Sanspapier.com. It enables to collect book reviews on blogs and internet website.",
+							"techno": ["Apache Nutch",
+							 			"Apache Solr - Full Search Text Engine",
+							 			"Apache Hadoop - HDFS",
+							 			"Java"],
+							"action": "I set up a cluster hadoop on 8 virtual machines. So, Nutch was working in parallel and was storing the url's content under the form of sequential files on the HDFS.<p>My colleagues were in charge to organise and recense the internet website of french publishing houses, bloggers and newspapers. We created then the regular expressions enabling to filter the websites' urls, so as to lessen the number of pages Nutcher was consulting.</p><p>These stages taken apart, I was responsible for Nutch configurations and of the Java virtual machine. The final time of crawl was around 3 days for over 500 Go of collected data.</p>",
+							"problem": ["Recensing sites, creating regular expressions demands a lot of time.",
+										"Data are bulky and very few relevant."],
+							"url": "http://nutch.apache.org/"
+						}
+					},
+					
+					{
+						"title": "Filter Job",
+						"content" : { 
+							"idea": "Filter Job is a program developed in Java on the Hadoop Map/Reduce framework. It enables to extract, sort out relevant data (collected by the crawler Nutch) and to link them to the books. This one runs on a HDFS Hadoop cluster.",
+							"techno": ["Java",
+							 			"Apache - Hadoop HDFS",
+							 			"Apache - Hadoop Map/Reduce",
+							 			"Apache - Sqoop",
+							 			"Oracle - Mysql"
+							],
+							"action": "I was truly independant on that stage of the project. I used sqooq to convert and insert data of Hadoop sequential files into database.<p>Based on the Hadoop Map/Reduce framework, the Mapper is charged to compare the pages' titles and url with a list of regular expressions generated from the titles, surnames and fornames of the authors of the books present in our catalogue. The simplest solution for each Mapper to get this list was to use the \"DistributedCached\" of the HDFS.</p><p>The Reducer is then absolutely typical and easy to use ; compacting the similar results into one.</p><p>I insert then the collected data into a database.</p><p>Final figures are around 7000 books linked on 45000 on the catalogue. (~ 15%).</p>",
+							"problem": ["short titles generate fake positives.",
+										"Too few « match » (≈ 15%).",
+										"the extracted text corpus are too polluted.",
+										"It's important to note that the treatments allotment had not been made from the beginning : the lasting of the treatments was of 5 complete days (with the risks involved in such poor performances). Once alloted, The lasting evolved to 12 hours minimum and to 22 hours on average. So a performance upgrading from 80 to 90% at best."
+							],
+							"url": "https://github.com/amaurybrisou/FilterJob"
+						}
+					},
+					{
+						"title": "Keyword Generator",
+						"content" : { 
+							"idea": "This program is a keyword generator. It runs after Filter Job so as to cut up the text corpus of each book into keywords. It calculs at the same time the weighting of each book for a given book.",
+							"techno": [ "Java",
+										"Unitex",
+										"Regular expressions",
+										"Apache - Solr",
+										"Oracle - Mysql"
+							],
+							"action": "Keyword Generator is a multithreaded program. It requires so an important quantity of memory.<p>I developed this program and the mathematical formulas of the weighting refinement.</p>",
+							"problem": ["Lasting of treatment very lengthy.",
+										"Excessive consumption of memory : I had to cut up the entrance data, however I should have sort out the treatments on the cluster.",
+										"Unitex requires a manual enrichment in vocabulary and expressions."
+							],
+							"url": "https://github.com/amaurybrisou/KeywordGenerator"
+						}
+					},
+					{
+						"title": "Top20 Generator",
+						"content" : { 
+							"idea": "Once the keywords generated and weighted, the calculator of Top 20 bounds the books between them according to their keywords and weighting. It creates so a list of books whose content comes closer the most of a given book. The process is so repeated for each book that constitutes the Sanspapier.com bookshop.",
+							"techno": [ "Java",
+							 			"Java Reflection Framework",
+							 			"Java Executor Framework",
+							 			"Expressions régulières",
+							 			"Apache - Solr",
+							 			"Oracle - Mysql"
+							],
+							"action": "I chose to develop this program by using the Java Reflection framework and the generic type. This enabled the team to get various calculation and sorting methods during the tests.",
+							"problem": ["Few problems at that stage : treated  data are less important."
+							],
+							"url": "https://github.com/amaurybrisou/Top20TargetGenerator"
+						}
+					},
+					{
+						"title": "Search Server",
+						"content" : { 
+							"idea": "Search server is an engine search fitted to the data previously generated (Nutch – Filterjob – KeywordGenerator – Top20Generator). It is based on the titles, keywords, surnames and forenames of the books.",
+							"techno": ["Java",
+							 			"Java Socket",
+							 			"Java Executor Framework",
+							 			"Expressions régulières",
+							 			"Apache - Solr",
+							 			"Oracle - Mysql"
+							],
+							"action" : "Although in narrow collaboration with the team, I worked almost all the time alone on the algorithms of Java. I analysed the manner of treating the user requests, of deciding (the use of a decision pile), and sorting the data.",
+							"problem": ["the lack of user informations makes decisions difficult and often arbitrary.",
+										"The number of possible decisions increases very quickly."
+							],
+							"url": "https://github.com/amaurybrisou/SearchServer"
+						}
+					},
+					{
+						"title": "Back Office Sanspapier.com",
+						"content" : { 
+							"idea": "The back office of a bookshop is largely responsible for inserting the catalogues of publishers. That's why, It integrates an analyser (a parser) of the \"Onix\" file (XML type).",
+							"techno": ["PHP - Symfony2 Framework",
+							 			"Oracle - Mysql"
+							],
+							"action" : "Aware of the running of the Back office in Php-Symfony 2, I used it for that stage of the project. By a common brainstorming, We exchanged regularly ideas, methods of coding and conceving the catalogue's model of data.",
+							"problem": [ "the choice of the technology was a mistake : the php is a script language ; and not a language of heavy treatments during hours."
+							],
+							"url": "https://github.com/amaurybrisou/data_sanspapier"
+						}
+					},
+					{
+						"title": "Front Office Sanspapier.com",
+						"content" : { 
+							"idea": "The Sanspapier.com front office is an user interface enabling the book search through the engine search (Search Server), and the purchasing of digital books.",
+							"techno": ["Javascript",
+							 			"Jquery",
+							 			"CSS3",
+							 			"HTML5"
+							],
+							"action": "I set up the autocompletion of the engine search requesting Solr data through an Ajax Jsonp call.",
+							"problem": ["Conceiving of a decent user experience was at the heart of our worries."
+							],
+							"url": "https://github.com/amaurybrisou/front_sanspapier"
+						}
+					},
+					{
+						"title": "Rameau Generator",
+						"content" : { 
+							"idea": "Rameau is a thesaurus made freely available by the Bibliothèque Nationale de France (BNF ; French National Library). Its using enabled to upgrade and enlarge the keywords and topics to which our books belonged. To carry out this stage, We stocked all these datas through that tools on a  Neo4j Graph.",
+							"techno": ["Java",
+							 			"Neo4j",
+							 			"Hibernate"
+							 ],
+							"action": " didn't develop this program, however I oversaw its completion. I helped the trainee I was in charge of, to analyse the needs and problematics, so as him to complete this task.",
+							"url": "https://github.com/amaurybrisou/RameauDatabaseGenerator"
+						}
+					},
+					{
+						"title": "Architecture Réseau",
+						"content" : { 
+							"idea": "Having been formed as a network administrator, I was in charge of setting up the servers at Sanspapier.com, the virtualization systems, and routers within the enterprise. Besides, I was in charge of the maintenance and the security of the informatic network.",
+							"action":"I set up, configured and maintained the network. 4 physical servers with 32 Go of Ram each, 8 hearts and a material RAIDO of 1 To. I used the Xen hypervisor in order to set up 20 virtual Linux Debian machines. These ones hosted the Subversion, Apache 2, Solr Server for our various versions of the site (development, tests, pre-production). The remaining machines were totally dedicated to the cluster hadoop (8 virtual machines).",
+							"techno": [ "Xen Hypervisor",
+							 			"Mdadm - Virtual RAID",
+							 			"LVM",
+							 			"Subversion",
+							 			"Bind9",
+							 			"Multiple Bash/Python Scripts"
+							]
+						}
+					},
+					{
+						"title": "Annuaire",
+						"content" : { 
+							"idea" : "This project is only a Python exercice I did in order to practice and use what this language can offers.",
+							"techno": [ "Python 3 Object Oriented",
+							 			"Modules : re, pickle...",
+							 			"Inheritance & Methods Overwriting",
+							 			"List Comprehensions"
+							],
+							"action": "I did it entirely, learning Python. I took me 2 days and definetely convince me that I like and want to code Python !",
+							"url": "https://github.com/amaurybrisou/Annuaire"
+						}
+					},
+					{
+						"perso": 1,
+						"title": "WW",
+						"content" : { 
+							"idea": "WW is a little javascript bookshop dedicated to the using of Webworkers (HTML5). It runs on the known by all principle : the adding of « listeners » to the project.",
+							"techno": [ "Web Worker",
+							 			"Javascript",
+							 			"Github"
+							],
+							"action": "WW is a bookshop I have developed alone for my personnal needs first. But, I think It could help developers because It easens the webworker integration and hugely reduces the appearance of mistakes difficult to debug when we use webworkers. I will carry on beefing it up according the needs.<p>The link above allows you to consult the demo as well as some.<p>\"Benchmarks\".</p> ",
+							"url": "http://ww.puzzledge.eu/"
+						}
+					},
+					{
+						"title": "Maze WebGL",
+						"content" : { 
+							"idea": "MazeGl is a personnal project on which I worked together with a friend. Working as a team was a great asset for the beginning of the project.",
+							"techno": ["Javascript",
+							 			"WebGL - Three js",
+							 			"Cannon js",
+							 			"Web Worker - WW",
+							 			"node js",
+							 			"Python",
+							 			"Github"
+							],
+							"problem": ["Collisions require a lot of ressources, the using of ww together with Cannon js has largely improved the development",
+										"Time managing is not stable yet and turns out to be a science by itself. I am still documenting on that subject."
+							],
+							"img": "maze.jpg",
+							"url": "http://maze.puzzledge.eu"
+						}
+					}
+				]
+			}, 
+	"who" : {
+				"bio" : "Me",
+				"asso" : "Volunteering",
+				"loisir" : "Hobbies",
+				"training": "Studies",
+				"ambition": "Professional Objectives",
+				"content":
+				{
+					"bio": "My name is Amaury Brisou, I'm from Bourges in the center of France. Currently all my family lives in the west side, close to the ocean.",
+					"training": "First I studied electronic, then I choose to learn Computer Science graduating as System & Network Administrator",
+					"ambition": "<p>After graduating, I choose to open my own company. I offered to individuals and other companies, computer installation and fixing. This experience enabled me to improve my relations with learning poeple, especially with novice persons.</p><p>I am dynamic, resourceful and worker. I want to work on Big Data and/or Javascript, Python development. Those are state of the art technologies which really correspond to my wishes.</p><p>By now and in short terms, I will improve my knowledge on Pig, Zookeeper and other data analysing tools. At the same time I'm practiving my Spanish and English languages in Peru.</p>",
+					"loisir": "<p>I took advantage of living in Paris to go in many Computer Science conferences about Big Data, Security and Web development.</p><p>I play the trumpet since fifteen years, I try to keep on working everyday and plan to play again in Jazz or other popular music style bands.</p>",
+					"photo": "amo.jpg"
+				}
+			},
+	"contact" : 
+			{
+				"intro": "Contact me by e-mail with the form beneath.",
+				"tel": "0652254233"
+			}
+}

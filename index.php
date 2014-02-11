@@ -1,27 +1,44 @@
-<html>
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr,en,es" lang="fr,en,es"/>
 <head>
+	<link rel="shortcut icon" href="img/favicon.png" />
+	<meta charset="UTF-8" />
+	<meta name="robots" content="index,follow"/>
+	<meta name="viewport" content="width=device-width" />
+	<meta http-equiv="Content-Language" content="fr,en,sp" />
+
+	<meta name="description" content="Curriculum de Amaury Brisou, Java/Map Reduce Programador/Administrator." />
+	<meta name="keywords" content="Resume,CV,Curriculum vitae,Programmeur,Programador,Coder,Developer,Java,Hadoop,HDFS,Map/Reduce,MRv2,MR,Javascript,HTML5,CSS3,Python,Amaury Brisou" />
+
+	<title>Amaury Brisou - Curriculum vitae</title>
+
 	<script type="text/javascript" src="lib/execute_script.js"></script>
 	<script type="text/javascript" src="lib/utilities.js"></script>
-
+	<script type="text/javascript">
+		if (navigator.browserLanguage || navigator.language)
+			var lang = navigator.browserLanguage || navigator.language || "en-US";
+	</script>
 	
-
 	<link rel='stylesheet' type="text/css" href="css/main.css">
 
 
 </head>
 <body>
 		<div id="export" style="hidden"></div>
-		<div id="language" class="fade-out">
-			<img id="fr" class="flag" src='img/fr-flag.png' />
-			<img id="en" class="flag" src='img/en-flag.png' />
-			<img id="sp" class="flag" src='img/sp-flag.png' />
-		</div>
+		<div id="photo_info" ></div>
 		<div id="links" class="fade-out">
 			<a class="pin" href='http://www.linkedin.com/pub/amaury-brisou/7a/22a/445' target="_blank" ><img class='pin' src='img/linkedin.png'/></a>
-			<a class="pin" href='export/cv_amaury_brisou.pdf' target="_blank" ><img id="cv_pdf" class="pin" src="img/cv.png"/></a>
+			<a id="cv" class="pin" href='export/cv-amaury-brisou-fr.pdf' target="_blank" ><img id="cv_pdf" class="pin" src="img/cv.png"/></a>
+		</div>
+		<div id="language" class="fade-out">
+			<img id="fr-FR" class="flag" src='img/fr-flag.png' />
+			<img id="en-US" class="flag" src='img/en-flag.png' />
+			<img id="es-ES" class="flag" src='img/sp-flag.png' />
 		</div>
 		
-		<img usemap="#img_map" id="img_back" class="click" src="img/seignosse.jpg"/>
+		
+		<img usemap="#img_map" id="img_back" class="click" src="img/seignosse.jpg" />
 		<div id="labels" >
 			<div class="label area fade-out click" id="who" filename="who"></div>
 			<div class="label area fade-out click" id="contact" filename="contact"></div>
@@ -36,7 +53,6 @@
 				
 				<div id="info_right" class='not-selected fade-out'>
 					<div id='table_entry_info' ></div>
-					<div id='table_entry_img' ></div>
 				</div>
 
 				<div id="modal_labels">
@@ -49,16 +65,17 @@
 
 			</div>
 		</div>
-		
-		
+
 
 
 
 	<script type="text/javascript">
-	
-		
+
 
 		<!--//--><![CDATA[//><!--
+
+
+			var re = new RegExp("^(en|fr|es)-[A-Z]{2}$");
 
 			var images =  [
 					{
@@ -99,7 +116,6 @@
 		//--><!]]>
 
 		window.onload = function(){
-			lang = "fr";
 			//avoid image dragging
 			document.body.ondragstart = function() { return false; };
 
@@ -112,18 +128,21 @@
 			$('main_modal').onmousedown = $('main_modal').click = CloseModal;
 		}
 
-		function init_language(){
-			if(!lang){
-				lang = "fr";
-			}
 
-			lang_content = JSON.parse(getPage('lang/'+lang+'.json'));
+		function init_language(){
+  			if (lang.match(re)) {
+				lang_content = JSON.parse(getPage('lang/'+lang.substring(0,2)+'.json'));
+
+				$('cv').href = "export/cv-amaury-brisou-"+lang+".pdf";
+			}
 
 		}
 
 		function init_labels(){
 
 			var entry, attach, img_attach;
+
+			$('photo_info').innerHTML = lang_content.photo;
 
 			for(var i = 0; i < lang_content.labels.length; i++){
 				entry = lang_content.labels[i];
@@ -204,7 +223,7 @@
 			var target = $('language');
 			if(target){
 				target.onMouseMove = onMouseMove;
-				target.onmousedown = change_language;
+				target.onmousedown = ChangeLanguage;
 			}
 
 			/*target = $('cv_pdf');
@@ -245,7 +264,7 @@
 
 
 
-		function change_language(e){
+		function ChangeLanguage(e){
 			if (e == null) e = window.event;
 			var target = e.target != null ? e.target : e.srcElement;
 
@@ -315,11 +334,6 @@
 
 			if(hasClass(target, 'close')){
 				
-				$('table_entry_info').removeAttribute("style");
-
-				
-				unhide(getElementsByClassName('hide', $('modal_labels') , 'div')[0]);
-
 				target = $('info_right');
 				fadeOut(target);
 				sizeDown(target);
@@ -335,9 +349,15 @@
 				target = $('modal_content');
 				fadeOut(target);
 				sizeDown(target);
+
 				
-				clearClass(target);
-				addClass(target, "fade-out size-down");
+				setTimeout(function(){
+					target.removeAttribute("style");
+				}, 750);
+
+				$('table_entry_info').removeAttribute("style");
+
+				unhide(getElementsByClassName('hide', $('modal_labels') , 'div')[0]);
 			};
 		}
 
@@ -358,6 +378,7 @@
 				
 				if(hasClass(target, 'modal_label')){
 					$('table_entry_info').removeAttribute("style");
+					$('modal_content').removeAttribute("style");
 					unhide(getElementsByClassName('hide', $('modal_labels') , 'div')[0]);
 					var t = $('info_left');
 					fadeOut(t);
@@ -365,9 +386,6 @@
 				}
 
 				hide($('modal_'+target.getAttribute("filename")));
-
-				//reset content
-				$('table_entry_img').innerHTML = "";
 
 				var info_left = $("info_left");
 

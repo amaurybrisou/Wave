@@ -1,0 +1,255 @@
+{
+	"photo": "Vague de Seignosse - Landes - Sud-Ouest de la France",
+	"labels" : [
+		{
+			"id" : "who",
+			"value": "Qui suis-je ?"
+		},
+		{
+			"id": "blog",
+			"value": "Blog"			
+		},
+		{
+			"id": "artwork",
+			"value": "Projets"
+		},
+		{
+			"id": "github",
+			"value": "Github"
+		},
+		{
+			"id": "contact",
+			"value": "Contact"
+		}
+	],
+	"artwork" :
+			{
+				"techno" : "Technologies & Outils Utilisés",
+				"problem" : "Problèmes Rencontrés",
+				"action" : "Mon intervention",
+				"url" : "Lien relatif au projet :",
+				"perso": "Projets Personnels",
+				"content" : 
+				[
+					{
+						"title": "Sanspapier.com",
+						"content" : { 
+							"idea" : "Le projet Sanspapier.com est une librairie numérique française indépendante. J'ai développé en équipe le projet sur la période 2012-2013.",
+							"action": "Sur les cinq personnes de l'équipe j'étais un référent indispensable à la validation des technologies employées pour faire avancer le projet. J'ai été analyste développeur ainsi que chercheur sur les différents programmes (Outils) détaillés ensuite.<p>Ces Outils permettent de réaliser un \"cycle de fabrication\" complet des données utilisées dans le moteur de recherche.</p><ul><li>Tout d'abord collecter des critiques de livres sur internet : Nutch Crawler.</li><li>Déterminer quelles données \"parlent\" de tel livre : Filter Job.</li><li>Découper ces corpus de texte en mot-clés et les pondérer : Keyword Generator</li><li>Enfin créer des listes de livres dont les mots-clés sont similaires. Ces listes ont pour pur de conseiller l'utilisateur dans ses choix de lecture : Top20Generator.</li></ul>Nous retrouvons ensuite ces listes sous forme de \"plateau tournant\" sur le site Sanspapier.com : Front Sanspapier.</p>",
+							"img": "sp.jpg",
+							"url": "http://sanspapier.com"
+						}
+					},
+					{ 
+						"title": "Nutch Crawler",
+						"content" : { 
+							"idea": "Apache Nutch s'inscrit dans le projet du site Sanspapier.com. Il permet de récupérer des critiques de livre sur des blogs et sites internet.",
+							"techno": ["Apache Nutch",
+							 			"Apache Solr - Full Search Text Engine",
+							 			"Apache Hadoop - HDFS",
+							 			"Java"],
+							"action": "J'ai mis en place un cluster Hadoop sur 8 machines virtuelles. Nutch s'exécutait donc en parallèle et stockait le contenu des url sous forme de fichier séquentiels sur le HDFS.<p>Mes collègues se sont chargés d'organiser et recenser les sites internet d'éditeurs, blogeurs et journaux français. Nous avons ensuite crée des expressions régulières permettant de filtrer les url des sites et ainsi minimiser le nombre de pages que Nutch consultait.</p><p>Hormis ces étapes, j'étais responsable des configurations de Nutch et de la Machine Virtuelle Java. Le temps de crawl final était d'environ 3 jours pour 500Go de données collectées.</p>",
+							"problem": ["Recenser les sites, créer des expressions régulières demande beaucoup de temps.",
+										"Les données sont volumineuses et très peu pertinentes."],
+							"url": "http://nutch.apache.org/"
+						}
+					},
+					
+					{
+						"title": "Filter Job",
+						"content" : { 
+							"idea": "Filter Job est un programme développé en Java sur le framework Hadoop Map/Reduce. Il permet d'extraire, de trier les données pertinentes (récoltées par le crawler Nutch) et de les lier aux livres. Celui-ci s'exécute sur un cluster Hadoop HDFS.",
+							"techno": ["Java",
+							 			"Apache - Hadoop HDFS",
+							 			"Apache - Hadoop Map/Reduce",
+							 			"Apache - Sqoop",
+							 			"Oracle - Mysql"
+							],
+							"action": "J'ai été totalement indépendant sur ce programme. J'ai utilisé sqoop pour convertir et insérer les données des fichiers séquentiels Hadoop en base de données.<p>Basé sur le framework Map/Reduce, le Mapper est chargé de comparer les titres et urls des pages avec une liste d'expressions régulières générées à partir des titres, noms et prénoms des auteurs des livres de notre catalogue. La solution la plus simple pour permettre à chaque Mapper d'obtenir cette liste à été de passer par le \"DistributedCached\" du HDFS.</p><p>Le Reducer est ensuite tout à fait typique; compactant les résultats similaires en un seul.</p><p>J'insère ensuite les données collectées en base de données.</p><p>Les chiffres finaux sont d'environ 7000 livres liés sur 45000 dans le catalogue (~15%).</p>",
+							"problem": ["Les titres cours génèrent des faux positifs.",
+										"Trop peu de \"Match\" (~15%).",
+										"Les corpus de texte extraits sont trop pollués.",
+										"A noter que la distribution des traitements n'a pas été faite dès le début : les temps de traitement étaient de 5 jours complets (avec les risques que cela comporte). Une fois distribués, ils sont passés à un minimum de 12 heures et une moyenne de 22 heures. Soit une amélioration des performances de 80 à 90%."
+							],
+							"url": "https://github.com/amaurybrisou/FilterJob"
+						}
+					},
+					{
+						"title": "Keyword Generator",
+						"content" : { 
+							"idea": "Ce programme est un générateur de mot-clés. Il s'exécute après Filter Job afin de découper les corpus de texte de chaque livre en mot-clés. Il calcule dans le même temps la pondération de chaque mot pour un livre donné.",
+							"techno": [ "Java",
+										"Unitex",
+										"Expressions régulières",
+										"Apache - Solr",
+										"Oracle - Mysql"
+							],
+							"action": "Le KeywordGenerator est un programme multi-threadé. Il requiert donc une quantité de mémoire importante.<p>J'ai développé ce programme ainsi que les formules mathématiques d'affinage des pondérations.</p>",
+							"problem": ["Temps de traitement très élevé.",
+										"Consommation de mémoire excessive : j'ai dû découper les données d'entrées, cependant il aurait fallu distribuer les traitements sur le cluster.",
+										"Unitex requiert un enrichissement manuel en vocabulaire & expressions."
+							],
+							"url": "https://github.com/amaurybrisou/KeywordGenerator"
+						}
+					},
+					{
+						"title": "Top20 Generator",
+						"content" : { 
+							"idea": "Une fois les mot-clés générés et pondérés, le calculateur de Top20 lie les livres entre eux en fonction de leur mot-clés et pondération. Il crée ainsi une liste des livres dont le contenu se rapproche le plus d'un livre donné. Le processus est donc répété pour chaque livre que constitue la librairie Sanspapier.com.",
+							"techno": [ "Java",
+							 			"Java Reflection Framework",
+							 			"Java Executor Framework",
+							 			"Expressions régulières",
+							 			"Apache - Solr",
+							 			"Oracle - Mysql"
+							],
+							"action": "J'ai choisi de développer ce programme en utilisant le framework Java Réflection et les types génériques. Ceci a permis à l'équipe d'avoir différentes méthodes de calcul et de tri durant les tests.",
+							"problem": ["Peu de problèmes à cette étape : les données traitées sont moins importantes."
+							],
+							"url": "https://github.com/amaurybrisou/Top20TargetGenerator"
+						}
+					},
+					{
+						"title": "Search Server",
+						"content" : { 
+							"idea": "Search Server est un moteur de recherche adapté aux données préalablement générées (Nutch - FilterJob - KeywordGenerator - Top20Generator). Il se base sur les titres, mot-clés, noms et prénoms des auteurs des livres.",
+							"techno": ["Java",
+							 			"Java Socket",
+							 			"Java Executor Framework",
+							 			"Expressions régulières",
+							 			"Apache - Solr",
+							 			"Oracle - Mysql"
+							],
+							"action" : "Bien qu'en étroite collaboration avec l'équipe j'ai beaucoup travaillé seul sur les algorithmes en Java. J'ai analysé la manière de traiter les requêtes utilisateur, de décider (utilisation d'une pile décisionnelle), et de trier les données.",
+							"problem": ["Le manque d'informations utilisateur rend les décisions difficiles et souvent arbitraires.",
+										"Le nombre de décisions possibles augmente très rapidement."
+							],
+							"url": "https://github.com/amaurybrisou/SearchServer"
+						}
+					},
+					{
+						"title": "Back Office Sanspapier.com",
+						"content" : { 
+							"idea": "Le Back Office d'une librairie est en grande partie responsable d'insérer les catalogues des éditeurs. C'est pourquoi il intègre un analyseur (parser) de fichier \"Onix\" (type XML).",
+							"techno": ["PHP - Symfony2 Framework",
+							 			"Oracle - Mysql"
+							],
+							"action" : "Conscient du fonctionnement du Back-Office en Php-Symfony2, Je l'ai déployé. Nous échangions régulièrement des idées, des algorithmes et sur la façon de concevoir le modèle de données du catalogue.",
+							"problem": [ "Le choix de la technologie a été une erreur : le php est un langage de script ; et non pas de traitements lourds durant des heures."
+							],
+							"url": "https://github.com/amaurybrisou/data_sanspapier"
+						}
+					},
+					{
+						"title": "Front Office Sanspapier.com",
+						"content" : { 
+							"idea": "Le Front Office de Sanspapier.com est une interface utilisateur permettant la consultation des livres via le moteur de recherche (Search Server), ainsi que l'achat de livres numériques.",
+							"techno": ["Javascript",
+							 			"Jquery",
+							 			"CSS3",
+							 			"HTML5"
+							],
+							"action": "J'ai mis en place l'auto-complétion du moteur de recherche en relation avec Solr via un appel Ajax Jsonp.",
+							"problem": ["la conception d'une expériecne utilisateur performante a été au coeur de nos préoccupations."
+							],
+							"url": "https://github.com/amaurybrisou/front_sanspapier"
+						}
+					},
+					{
+						"title": "Rameau Generator",
+						"content" : { 
+							"idea": "Rameau est un thésaurus mis à disposition par la Bibliothèque Nationale de France (BNF). Son utilisation a permis d'améliorer et d'élargir les mots clés et thèmes auxquels nos livres appartenaient. Pour cela nous avons stocké nos livres dans un Graph Neo4j.",
+							"techno": ["Java",
+							 			"Neo4j",
+							 			"Hibernate"
+							 ],
+							"action": "Je n'ai pas développé ce programme, cependant je l'ai supervisé. J'ai aidé le stagiaire que j'avais sous ma responsabilité à analyser les besoins et les problématiques afin qu'il les réalise ensuite.",
+							"url": "https://github.com/amaurybrisou/RameauDatabaseGenerator"
+						}
+					},
+					{
+						"title": "Architecture Réseau",
+						"content" : { 
+							"idea": "Ayant une formation d'administrateur réseau, j'ai été chargé d'installer les serveurs chez Sanspapier.com, les systèmes de virtualisation, et les routeurs au sein de l'entreprise. En outre, j'étais responsable de la maintenance et de la sécurité du réseau informatique.",
+							"action":"J'ai installé, configuré et maintenu le réseau. 4 serveurs physiques avec chacun 32Go de RAM, 8 coeurs et un RAID0 matériel de 1To. J'ai utilisé l'hyperviseur Xen afin d'installer 20 machines virtuelles Linux Debian. Celles-ci hébergeaient des serveurs Subversion, Apache2, Solr pour nos différentes versions du site (développement, tests, pré-production). Celles restantes furent totalement dédiées au cluster Hadoop (8 machines virtuelles).",
+							"techno": [ "Xen Hypervisor",
+							 			"Mdadm - Virtual RAID",
+							 			"LVM",
+							 			"Subversion",
+							 			"Bind9",
+							 			"Multiple Bash/Python Scripts"
+							]
+						}
+					},
+					{
+						"title": "Annuaire",
+						"content" : { 
+							"idea" : "Ce projet a été écrit en Python comme un exercice d'apprentissage accéléré.",
+							"techno": [ "Python 3 Object Oriented",
+							 			"Modules : re, pickle...",
+							 			"Inheritance & Methods Overwriting",
+							 			"List Comprehensions"
+							],
+							"action": "Je l'ai réalisé en 2 jours et m'a définitivement convaincu que je veux coder en Python !",
+							"url": "https://github.com/amaurybrisou/Annuaire"
+						}
+					},
+					{
+						"perso": 1,
+						"title": "WW",
+						"content" : { 
+							"idea": "WW est une petite librairie javascript dédiée à l'utilisation des Web Worker (HTML5). Celle-ci fonctionne sur le principe connu de tous : l'ajout de \"Listeners\" à des objets.",
+							"techno": [ "Web Worker",
+							 			"Javascript",
+							 			"Github"
+							],
+							"action": "J'ai développé WW d'abord pour mon besoin ; je l'ai intégré a mon projet WebGL. Je pense qu'elle peut aider les développeurs car elle facilite l'intégration des Web Worker et réduit considérablement l'apparition d'erreurs difficiles à debugger lorsque l'on travaille avec les Web Workers. Je continuerai de l'étoffer en fonction des besoins.<p>Le lien ci-dessus vous permet de consulter la démo ainsi que quelques \"Benchmarks\".</p>",
+							"url": "http://ww.puzzledge.eu/"
+						}
+					},
+					{
+						"title": "Maze WebGL",
+						"content" : { 
+							"idea": "MazeGL est un projet personnel sur lequel j'ai travaillé en coopération avec un ami. Le fait de pouvoir travailler en équipe à été un élément important pour l'émergence de ce projet.",
+							"techno": ["Javascript",
+							 			"WebGL - Three js",
+							 			"Cannon js",
+							 			"Web Worker - WW",
+							 			"node js",
+							 			"Python",
+							 			"Github"
+							],
+							"problem": ["Les collisions nécessitent beaucoup de ressources, l'utilisation de WW allié à Cannon.js en a grandement facilité le développement.",
+										"La gestion du temps n'est pas encore stable et s'avère être une science à part. Je continue de me documenter sur le sujet."
+							],
+							"img": "maze.jpg",
+							"url": "http://maze.puzzledge.eu"
+						}
+					}
+				]
+			}, 
+	"who" : {
+				"bio" : "Présentation",
+				"asso" : "Volontariat",
+				"loisir" : "Loisirs",
+				"training": "Etudes",
+				"ambition": "Ambition Professionnelle",
+				"content":
+				{
+					"bio": "Je m'appelle Amaury Brisou, je suis originaire de Bourges dans le centre de la France.",
+					"training": "J'ai obtenu un baccalauréat technologique option électronique. J'ai ensuite choisi d'étudier l'informatique en préparant un brevet de technicien supérieur option administrateur système et réseaux en alternance ; me permettant ainsi d'acquérir une expérience professionnelle.",
+					"ambition": "<p>Après ma dernière année d'étude alternance, Je me suis mis à mon compte. Je proposais aux particuliers comme aux entreprises des services d'installations et dépannages informatiques. Cette expérience m'a permise d'améliorer mon approche pédagogique avec les utilisateurs novices.</p><p>Je suis entreprenant, battant et travailleur. J'ai envie de cultiver mon expérience du Big Data ou du WebGL. Ce  sont des technologies d'avenir qui correspondent tout à fait à mes souhaits.<p>Mes objectifs à court terme sont d'appréhender parfaitement Pig, Zookeeper et d'autres outils d'analyse de données.</p>",
+					"asso": [
+						"Tradition et Unité Berrichonne est une association Tourangelle qui s'occupe d'organiser des manifestations culturelles. J'ai participé à l'organisation de plusieurs événements : concerts, rencontres autour du skateboard, j'y ai moi même joué de la musique.",
+						"J'ai profité du fait de vivre à Paris pour aller à de nombreuses conférences d'informatique sur des sujets tels que le Big Data, la sécurité informatique, le développement Web..."
+					],
+					"loisir": "Je fais de la musique depuis mon plus jeune âge, je pratique tous les jours la trompette depuis 15 ans et même si je n'ai plus eu le temps ces dernières années, j'ai à coeur de rejouer dans des groupes de Jazz et/ou d'autres styles musicaux.",
+					"photo": "amo.jpg"
+				}
+			},
+	"contact" : 
+			{
+				"intro": "Contactez moi par e-mail via le formulaire ci-dessous.",
+				"tel": "0652254233"
+			}
+}

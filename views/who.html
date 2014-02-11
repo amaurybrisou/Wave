@@ -1,9 +1,65 @@
 <style type="text/css">
+
+#modal_content.size-up {
+	height:465px;
+	width: 980px;
+}
+
+#info_right {
+	-webkit-transition: opacity 1s ease 0.75s, height 1s ease 0.1s, width 0.5s ease 0.5s;/* transition pour Chrome et Safari */
+    -moz-transition: 	opacity 1s ease 0.75s, height 1s ease 0.1s, width 0.5s ease 0.5s;/* transition pour Firefox */
+    -o-transition: 		opacity 1s ease 0.75s, height 1s ease 0.1s, width 0.5s ease 0.5s;/* transition pour Opéra */
+    transition: 		opacity 1s ease 0.75s, height 1s ease 0.1s, width 0.5s ease 0.5s;*/ 
+}
+
+
+.photo_margin {
+	width: 690px;
+}
+
+#modal_labels {
+	float: left;
+	margin-left: 50px;
+	width: 710px;
+	margin-top: 10px;
+}
+.modal_label {
+    float: left;
+    font-size: 12px;
+    margin-left: 100px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    text-align: justify;
+    text-decoration: underline;
+}
+
 .photo_info {
+	float: right;
+	margin-right: 30px;
 	-moz-border-radius:10px 10px 10px 10px;
 	-webkit-border-radius:10px 10px 10px 10px;
 	border-radius:10px 10px 10px 10px;
 }
+
+hr {
+    display: block;
+    clear: both;
+    height: 0;
+    margin: 10px 0 10px;
+    padding: 0;
+    border: 0;
+    font-family: arial;
+    text-align: center;
+    font-size: 30px;
+    line-height: 1;
+}
+hr:after {
+    content: "\273D \273D \273D";
+    height: 0;			
+    letter-spacing: 1em;
+    
+}
+
 </style>
 
 <script type="text/javascript">
@@ -15,13 +71,30 @@
 	var bio_label = projects_data.bio;
 	var asso_label = projects_data.asso;
 	var loisir_label = projects_data.loisir;
+	var ambition_label = projects_data.ambition;
+	var training_label = projects_data.training;
 
 	var content = projects_data.content;
 
 	var attach = $('table_entry_info');
-	if(content.bio){
-		attach.innerHTML = '<h4 class="label_info">'+bio_label+'</h4><p>'+content.bio+'</p>';
+	
+	if(content.photo){
+		attach.innerHTML = '<img class="photo_info" src="img/'+content.photo+'"/>';
 	}
+
+	if(content.bio){
+		attach.innerHTML += '<h4 class="photo_margin label_info">'+bio_label+'</h4><p class="photo_margin" >'+content.bio+'</p>';
+	}
+
+	if(content.training){
+		attach.innerHTML += '<h4 class="photo_margin label_info">'+training_label+'</h4><p class="photo_margin" >'+content.training+'</p>';
+	}
+
+	if(content.ambition){
+		attach.innerHTML += '<h4 class="label_info">'+ambition_label+'</h4><p>'+content.ambition+'</p>';
+	}
+
+	attach.innerHTML += "<hr></hr>"
 
 	if(content.asso){
 		attach.innerHTML += '<h4 class="label_info">'+asso_label+'</h4><p>'+content.asso+'</p>';
@@ -31,9 +104,7 @@
 		attach.innerHTML += '<h4 class="label_info">'+loisir_label+'</h4><p>'+content.loisir+'</p>';
 	}
 	
-	if(content.photo){
-		attach.innerHTML += '<img class="photo_info" src="img/'+content.photo+'"/>';
-	}
+	
 	
 
 }());

@@ -1,14 +1,29 @@
 <style type="text/css">
 
 #modal_content.size-up {
-	height: 415px;
-	width: 381px;
+	height: 420px;
+	width: 380px;
 	overflow: auto;
+	resize: none;
 }
 
 
 #modal_contact {
 	margin: 0;
+}
+
+#info_right {
+	width: 90%;
+}
+
+.modal_label {
+    float: left;
+    font-size: 12px;
+    margin-left: 10%;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    text-align: justify;
+    text-decoration: underline;
 }
 
 #table_entry_info {
@@ -19,13 +34,13 @@
 #table_entry_info p {
 	font-size: 13px;
 }
-#table_entry_img {
-	
-	height: 340px;
-	-webkit-transition: opacity 0.5s ease-in-out, display 0s ease-in-out 0.55s;
-    -moz-transition: 	opacity 0.5s ease-in-out, display 0s ease-in-out 0.55s; 
-    -o-transition: 		opacity 0.5s ease-in-out, display 0s ease-in-out 0.55s;
-    transition: 		opacity 0.5s ease-in-out, display 0s ease-in-out 0.55s; 
+
+#modal_labels {
+	width: 100%;
+}
+
+#close {
+	margin-top: 4%;
 }
 
 </style>
@@ -38,8 +53,6 @@
 
 	var attach = $('table_entry_info');
 	attach.innerHTML = '<p>'+contact_data.intro+'</p>';
-	
-	attach = $('table_entry_img');
 	attach.innerHTML += '<a id="foxyform_embed_link_129636" href="http://fr.foxyform.com/"></a>';
 
 	(function(d, t){
